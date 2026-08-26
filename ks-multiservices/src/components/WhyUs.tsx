@@ -35,7 +35,7 @@ export default function WhyUs() {
     <section id="pourquoi-nous" ref={scope} className="bg-paper-2 py-24 md:py-32">
       <div className="container-page">
         <div className="max-w-2xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[color:var(--color-brass-strong)]">
+          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[color:var(--color-accent-strong)]">
             Pourquoi KS Multiservices
           </p>
           <h2 className="mt-4 font-display text-3xl font-semibold text-[color:var(--color-text-on-light)] sm:text-4xl">

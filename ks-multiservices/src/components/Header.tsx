@@ -1,14 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { List, PhoneCall, X } from "@phosphor-icons/react/dist/ssr";
 import { business, serviceCategories } from "@/lib/content";
 
 const navLinks = [
   { href: "#services", label: "Services" },
+  { href: "#tarifs", label: "Tarifs" },
   { href: "#intervention", label: "Intervention" },
   { href: "#pourquoi-nous", label: "Pourquoi nous" },
-  { href: "#zone", label: "Zone d'intervention" },
+  { href: "/zone-intervention", label: "Zone d'intervention" },
   { href: "#realisations", label: "Réalisations" },
   { href: "#contact", label: "Contact" },
 ];
@@ -38,29 +41,31 @@ export default function Header() {
       }`}
     >
       <div className="container-page flex h-16 items-center justify-between md:h-20">
-        <a
-          href="#accueil"
-          className="font-display text-xl font-semibold tracking-tight text-[color:var(--color-text-on-dark)] md:text-2xl"
-        >
-          KS<span className="text-[color:var(--color-brass)]">.</span>Multiservices
+        <a href="#accueil" className="flex items-center gap-2.5" aria-label="KS Multiservices — Accueil">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white">
+            <Image src="/logo.jpg" alt="" width={40} height={40} className="h-full w-full object-cover" priority />
+          </span>
+          <span className="font-display text-xl font-semibold tracking-tight text-[color:var(--color-text-on-dark)] md:text-2xl">
+            KS<span className="text-[color:var(--color-accent)]">.</span>Multiservices
+          </span>
         </a>
 
         <nav className="hidden items-center gap-8 lg:flex" aria-label="Navigation principale">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-[color:var(--color-text-on-dark-muted)] transition hover:text-[color:var(--color-brass)]"
+              className="text-sm font-medium text-[color:var(--color-text-on-dark-muted)] transition hover:text-[color:var(--color-accent)]"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
         <div className="flex items-center gap-3">
           <a
             href={`tel:${business.phoneHref}`}
-            className="hidden items-center gap-2 rounded-full bg-[color:var(--color-brass)] px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-[color:var(--color-brass-strong)] sm:inline-flex"
+            className="hidden items-center gap-2 rounded-full bg-[color:var(--color-accent)] px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-[color:var(--color-accent-strong)] sm:inline-flex"
           >
             <PhoneCall size={18} weight="fill" aria-hidden="true" />
             {business.phone}
@@ -85,14 +90,14 @@ export default function Header() {
         >
           <nav className="flex flex-col gap-1" aria-label="Navigation mobile">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
-                className="rounded-lg px-3 py-3 text-base font-medium text-[color:var(--color-text-on-dark)] transition hover:bg-[color:var(--color-surface)] hover:text-[color:var(--color-brass)]"
+                className="rounded-lg px-3 py-3 text-base font-medium text-[color:var(--color-text-on-dark)] transition hover:bg-[color:var(--color-surface)] hover:text-[color:var(--color-accent)]"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
           <ul className="mt-4 flex flex-wrap gap-2 px-3">
@@ -107,7 +112,7 @@ export default function Header() {
           </ul>
           <a
             href={`tel:${business.phoneHref}`}
-            className="mt-6 flex items-center justify-center gap-2 rounded-full bg-[color:var(--color-brass)] px-4 py-3 text-sm font-semibold text-ink"
+            className="mt-6 flex items-center justify-center gap-2 rounded-full bg-[color:var(--color-accent)] px-4 py-3 text-sm font-semibold text-ink"
           >
             <PhoneCall size={18} weight="fill" aria-hidden="true" />
             Appeler {business.phone}

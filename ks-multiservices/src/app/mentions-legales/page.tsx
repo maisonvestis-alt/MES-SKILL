@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { business } from "@/lib/content";
+import { business, legalInfo } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Mentions légales",
@@ -15,16 +15,16 @@ const Placeholder = ({ children }: { children: React.ReactNode }) => (
 export default function MentionsLegalesPage() {
   return (
     <main id="contenu-principal" className="mx-auto max-w-3xl px-5 py-24 md:py-32">
-      <Link href="/" className="text-sm font-medium text-[color:var(--color-brass-strong)]">
+      <Link href="/" className="text-sm font-medium text-[color:var(--color-accent-strong)]">
         ← Retour à l&apos;accueil
       </Link>
       <h1 className="font-display mt-6 text-3xl font-semibold">Mentions légales</h1>
 
       <p className="mt-6 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
-        Cette page contient des champs <Placeholder>à compléter</Placeholder> : les
-        informations légales (SIRET, forme juridique, capital, hébergeur, directeur de
-        la publication) n&apos;ont pas été fournies et ne doivent jamais être inventées.
-        Merci de transmettre ces éléments pour finaliser la page avant mise en ligne.
+        Le nom de l&apos;hébergeur et le directeur de la publication sont marqués{" "}
+        <Placeholder>à compléter</Placeholder> : ces informations n&apos;ont pas été
+        fournies et ne doivent jamais être inventées. Merci de les transmettre pour
+        finaliser la page avant mise en ligne.
       </p>
 
       <section className="mt-10 space-y-8 text-[color:var(--color-text-on-light-muted)]">
@@ -33,15 +33,25 @@ export default function MentionsLegalesPage() {
             Éditeur du site
           </h2>
           <p className="mt-2">
-            {business.name}
+            {legalInfo.raisonSociale}
             <br />
             {business.address.full}
             <br />
             Téléphone : {business.phone}
             <br />
-            Forme juridique : <Placeholder>à compléter</Placeholder>
+            Email : {business.email}
             <br />
-            SIRET : <Placeholder>à compléter</Placeholder>
+            Forme juridique : {legalInfo.formeJuridique}
+            <br />
+            SIREN : {legalInfo.siren}
+            <br />
+            SIRET (siège) : {legalInfo.siret}
+            <br />
+            Code APE/NAF : {legalInfo.apeCode} — {legalInfo.apeLabel}
+            <br />
+            N° TVA intracommunautaire : {legalInfo.tvaIntracommunautaire}
+            <br />
+            Date de création : {legalInfo.dateCreation}
             <br />
             Directeur de la publication : <Placeholder>à compléter</Placeholder>
           </p>

@@ -49,7 +49,7 @@ export default function Services() {
     <section id="services" ref={scope} className="bg-paper py-24 md:py-32">
       <div className="container-page">
         <div className="max-w-2xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[color:var(--color-brass-strong)]">
+          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[color:var(--color-accent-strong)]">
             Nos savoir-faire
           </p>
           <h2 className="mt-4 font-display text-3xl font-semibold text-[color:var(--color-text-on-light)] sm:text-4xl">
@@ -72,7 +72,7 @@ export default function Services() {
                 className="flex flex-col rounded-3xl border border-[color:var(--color-border-light)] bg-white p-7 shadow-[0_24px_60px_-40px_rgba(20,23,28,0.35)]"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-ink">
-                  <Icon size={24} weight="duotone" className="text-[color:var(--color-brass)]" aria-hidden="true" />
+                  <Icon size={24} weight="duotone" className="text-[color:var(--color-accent)]" aria-hidden="true" />
                 </div>
                 <h3 className="mt-5 font-display text-xl font-semibold text-[color:var(--color-text-on-light)]">
                   {category.name}
@@ -86,7 +86,7 @@ export default function Services() {
                   onClick={() => setOpenSlug(isOpen ? null : category.slug)}
                   aria-expanded={isOpen}
                   aria-controls={`services-${category.slug}`}
-                  className="mt-5 inline-flex items-center gap-1.5 self-start text-sm font-semibold text-[color:var(--color-brass-strong)] transition hover:text-ink"
+                  className="mt-5 inline-flex items-center gap-1.5 self-start text-sm font-semibold text-[color:var(--color-accent-strong)] transition hover:text-ink"
                 >
                   {isOpen ? "Voir moins" : "Voir toutes les prestations"}
                   <CaretDown
@@ -108,7 +108,7 @@ export default function Services() {
                       <li key={item.slug} className="flex items-start gap-2">
                         <span
                           aria-hidden="true"
-                          className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[color:var(--color-brass)]"
+                          className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[color:var(--color-accent)]"
                         />
                         {item.label}
                       </li>
@@ -118,7 +118,7 @@ export default function Services() {
 
                 <a
                   href={`tel:${business.phoneHref}`}
-                  className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-ink underline decoration-[color:var(--color-brass)] decoration-2 underline-offset-4"
+                  className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-ink underline decoration-[color:var(--color-accent)] decoration-2 underline-offset-4"
                 >
                   Demander cette intervention →
                 </a>
@@ -133,7 +133,7 @@ export default function Services() {
         >
           <div className="flex items-start gap-4">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[color:var(--color-surface)]">
-              <Hammer size={22} weight="duotone" className="text-[color:var(--color-brass)]" aria-hidden="true" />
+              <Hammer size={22} weight="duotone" className="text-[color:var(--color-accent)]" aria-hidden="true" />
             </div>
             <div>
               <h3 className="font-display text-xl font-semibold">{renovationService.name}</h3>
@@ -144,7 +144,7 @@ export default function Services() {
           </div>
           <a
             href="#contact"
-            className="inline-flex shrink-0 items-center gap-2 rounded-full border border-[color:var(--color-brass)] px-6 py-3 text-sm font-semibold text-[color:var(--color-brass)] transition hover:bg-[color:var(--color-brass)] hover:text-ink"
+            className="inline-flex shrink-0 items-center gap-2 rounded-full border border-[color:var(--color-accent)] px-6 py-3 text-sm font-semibold text-[color:var(--color-accent)] transition hover:bg-[color:var(--color-accent)] hover:text-ink"
           >
             Discuter de mon projet
           </a>

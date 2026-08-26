@@ -42,7 +42,7 @@ export default function Process() {
     <section id="intervention" ref={scope} className="bg-ink py-24 md:py-32">
       <div className="container-page">
         <div className="max-w-2xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[color:var(--color-brass)]">
+          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[color:var(--color-accent)]">
             Comment ça se passe
           </p>
           <h2 className="mt-4 font-display text-3xl font-semibold text-[color:var(--color-text-on-dark)] sm:text-4xl">
@@ -59,14 +59,14 @@ export default function Process() {
             <div
               data-process-line
               aria-hidden="true"
-              className="absolute left-1/2 top-2 h-full w-px -translate-x-1/2 bg-[color:var(--color-brass)]"
+              className="absolute left-1/2 top-2 h-full w-px -translate-x-1/2 bg-[color:var(--color-accent)]"
             />
           </div>
 
           <ol className="flex flex-col gap-10 md:col-start-2 md:gap-14">
             {processSteps.map((item) => (
               <li key={item.step} data-process-step className="flex gap-5">
-                <span className="font-display shrink-0 text-3xl font-semibold text-[color:var(--color-brass)] sm:text-4xl">
+                <span className="font-display shrink-0 text-3xl font-semibold text-[color:var(--color-accent)] sm:text-4xl">
                   {item.step}
                 </span>
                 <div>

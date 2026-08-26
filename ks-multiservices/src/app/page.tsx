@@ -5,6 +5,7 @@ import IntroSequence from "@/components/IntroSequence";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Services from "@/components/Services";
+import Pricing from "@/components/Pricing";
 import Process from "@/components/Process";
 import WhyUs from "@/components/WhyUs";
 import ServiceArea from "@/components/ServiceArea";
@@ -28,6 +29,7 @@ export default function Home() {
       <main id="contenu-principal">
         <Hero />
         <Services />
+        <Pricing />
         <Process />
         <WhyUs />
         <ServiceArea />
