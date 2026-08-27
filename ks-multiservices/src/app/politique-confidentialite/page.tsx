@@ -1,61 +1,56 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import LegalShell, { LegalSection } from "@/components/LegalShell";
 import { business } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Politique de confidentialité",
+  description: `Traitement des données personnelles sur le site ${business.name}.`,
+  alternates: { canonical: "/politique-confidentialite" },
+  robots: { index: false, follow: true },
 };
 
-export default function PrivacyPolicyPage() {
+export default function PolitiqueConfidentialitePage() {
   return (
-    <main id="contenu-principal" className="mx-auto max-w-3xl px-5 py-24 md:py-32">
-      <Link href="/" className="text-sm font-medium text-[color:var(--color-brass-strong)]">
-        ← Retour à l&apos;accueil
-      </Link>
-      <h1 className="font-display mt-6 text-3xl font-semibold">
-        Politique de confidentialité
-      </h1>
+    <LegalShell
+      title="Politique de confidentialité"
+      notice={
+        <>
+          Cette politique décrit le traitement réellement en place aujourd&apos;hui : le
+          formulaire de contact, et rien d&apos;autre. Elle devra être revue si des
+          outils de mesure d&apos;audience, de publicité ou un CRM sont ajoutés.
+        </>
+      }
+    >
+      <LegalSection heading="Données collectées">
+        <p>
+          Le formulaire de contact collecte votre nom, votre numéro de téléphone, la
+          prestation concernée et le message que vous rédigez. Ces informations servent
+          uniquement à traiter votre demande d&apos;intervention ou de devis.
+        </p>
+      </LegalSection>
 
-      <p className="mt-6 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
-        Cette politique décrit le traitement minimal actuellement en place (formulaire
-        de contact). Elle doit être revue avec un conseil juridique si des outils
-        d&apos;analyse d&apos;audience, de publicité ou un CRM sont ajoutés au site.
-      </p>
+      <LegalSection heading="Destinataire">
+        <p>
+          Les données transmises sont destinées exclusivement à {business.name} et ne
+          sont partagées avec aucun tiers à des fins commerciales.
+        </p>
+      </LegalSection>
 
-      <section className="mt-10 space-y-8 text-[color:var(--color-text-on-light-muted)]">
-        <div>
-          <h2 className="font-display text-xl font-semibold text-[color:var(--color-text-on-light)]">
-            Données collectées
-          </h2>
-          <p className="mt-2">
-            Le formulaire de contact de ce site collecte votre nom, votre numéro de
-            téléphone, le service concerné et le message que vous rédigez. Ces
-            informations sont utilisées uniquement pour répondre à votre demande.
-          </p>
-        </div>
+      <LegalSection heading="Cookies et mesure d'audience">
+        <p>
+          Ce site ne dépose aucun cookie publicitaire et n&apos;intègre aucun service de
+          suivi tiers. La carte de la zone d&apos;intervention est dessinée par le site
+          lui-même, sans appel à un service de cartographie externe.
+        </p>
+      </LegalSection>
 
-        <div>
-          <h2 className="font-display text-xl font-semibold text-[color:var(--color-text-on-light)]">
-            Destinataire
-          </h2>
-          <p className="mt-2">
-            Les données transmises via le formulaire sont destinées exclusivement à
-            {" "}
-            {business.name} et ne sont partagées avec aucun tiers.
-          </p>
-        </div>
-
-        <div>
-          <h2 className="font-display text-xl font-semibold text-[color:var(--color-text-on-light)]">
-            Vos droits
-          </h2>
-          <p className="mt-2">
-            Conformément au RGPD, vous disposez d&apos;un droit d&apos;accès, de
-            rectification et de suppression des données vous concernant. Pour exercer
-            ce droit, contactez {business.name} au {business.phone}.
-          </p>
-        </div>
-      </section>
-    </main>
+      <LegalSection heading="Vos droits">
+        <p>
+          Conformément au RGPD, vous disposez d&apos;un droit d&apos;accès, de
+          rectification et de suppression des données vous concernant. Pour l&apos;exercer,
+          contactez {business.name} au {business.phone}.
+        </p>
+      </LegalSection>
+    </LegalShell>
   );
 }

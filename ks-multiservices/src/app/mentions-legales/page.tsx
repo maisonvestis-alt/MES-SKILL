@@ -1,73 +1,76 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import LegalShell, { LegalSection } from "@/components/LegalShell";
 import { business } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Mentions légales",
+  description: `Mentions légales du site ${business.name} — serrurerie, plomberie et vitrerie au Havre.`,
+  alternates: { canonical: "/mentions-legales" },
+  robots: { index: false, follow: true },
 };
 
-const Placeholder = ({ children }: { children: React.ReactNode }) => (
-  <span className="rounded bg-amber-100 px-1.5 py-0.5 font-mono text-[0.85em] text-amber-900">
-    {children}
-  </span>
-);
+/** Champ non fourni par l'entreprise : jamais inventé, toujours signalé. */
+function Todo({ children = "à compléter" }: { children?: React.ReactNode }) {
+  return (
+    <span className="rounded bg-[color:var(--color-signal-soft)] px-1.5 py-0.5 font-mono text-[0.85em] text-[color:var(--color-signal-ink)]">
+      {children}
+    </span>
+  );
+}
 
 export default function MentionsLegalesPage() {
   return (
-    <main id="contenu-principal" className="mx-auto max-w-3xl px-5 py-24 md:py-32">
-      <Link href="/" className="text-sm font-medium text-[color:var(--color-brass-strong)]">
-        ← Retour à l&apos;accueil
-      </Link>
-      <h1 className="font-display mt-6 text-3xl font-semibold">Mentions légales</h1>
+    <LegalShell
+      title="Mentions légales"
+      notice={
+        <>
+          <strong className="font-semibold">Page à finaliser :</strong> les informations
+          légales (forme juridique, SIRET, directeur de la publication, hébergeur)
+          n&apos;ont pas été communiquées. Elles sont signalées ci-dessous plutôt
+          qu&apos;inventées — merci de les transmettre avant la mise en ligne.
+        </>
+      }
+    >
+      <LegalSection heading="Éditeur du site">
+        <p>
+          {business.name}
+          <br />
+          {business.address.full}
+          <br />
+          Téléphone : {business.phone}
+          <br />
+          Forme juridique : <Todo />
+          <br />
+          SIRET : <Todo />
+          <br />
+          Directeur de la publication : <Todo />
+        </p>
+      </LegalSection>
 
-      <p className="mt-6 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
-        Cette page contient des champs <Placeholder>à compléter</Placeholder> : les
-        informations légales (SIRET, forme juridique, capital, hébergeur, directeur de
-        la publication) n&apos;ont pas été fournies et ne doivent jamais être inventées.
-        Merci de transmettre ces éléments pour finaliser la page avant mise en ligne.
-      </p>
+      <LegalSection heading="Hébergement">
+        <p>
+          Hébergeur : <Todo />
+          <br />
+          Adresse : <Todo />
+        </p>
+      </LegalSection>
 
-      <section className="mt-10 space-y-8 text-[color:var(--color-text-on-light-muted)]">
-        <div>
-          <h2 className="font-display text-xl font-semibold text-[color:var(--color-text-on-light)]">
-            Éditeur du site
-          </h2>
-          <p className="mt-2">
-            {business.name}
-            <br />
-            {business.address.full}
-            <br />
-            Téléphone : {business.phone}
-            <br />
-            Forme juridique : <Placeholder>à compléter</Placeholder>
-            <br />
-            SIRET : <Placeholder>à compléter</Placeholder>
-            <br />
-            Directeur de la publication : <Placeholder>à compléter</Placeholder>
-          </p>
-        </div>
+      <LegalSection heading="Propriété intellectuelle">
+        <p>
+          L&apos;ensemble des contenus présents sur ce site (textes, visuels, logo) est
+          la propriété de {business.name}, sauf mention contraire. Toute reproduction
+          sans autorisation est interdite.
+        </p>
+      </LegalSection>
 
-        <div>
-          <h2 className="font-display text-xl font-semibold text-[color:var(--color-text-on-light)]">
-            Hébergement
-          </h2>
-          <p className="mt-2">
-            Nom de l&apos;hébergeur : <Placeholder>à compléter</Placeholder>
-            <br />
-            Adresse : <Placeholder>à compléter</Placeholder>
-          </p>
-        </div>
-
-        <div>
-          <h2 className="font-display text-xl font-semibold text-[color:var(--color-text-on-light)]">
-            Propriété intellectuelle
-          </h2>
-          <p className="mt-2">
-            L&apos;ensemble des contenus présents sur ce site (textes, visuels, logo)
-            est la propriété de {business.name}, sauf mention contraire.
-          </p>
-        </div>
-      </section>
-    </main>
+      <LegalSection heading="Photographies">
+        <p>
+          Les visuels d&apos;interventions publiés sur ce site illustrent des
+          réalisations de {business.name}. Tant que les photographies définitives ne
+          sont pas fournies, des panneaux graphiques neutres sont affichés à leur
+          place : aucune image de banque n&apos;est présentée comme un chantier réel.
+        </p>
+      </LegalSection>
+    </LegalShell>
   );
 }

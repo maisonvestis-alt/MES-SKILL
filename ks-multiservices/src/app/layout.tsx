@@ -1,67 +1,100 @@
-import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Archivo, Inter } from "next/font/google";
 import "./globals.css";
-import { business } from "@/lib/content";
+import { business, serviceArea, serviceCategories, siteUrl } from "@/lib/content";
+import { motionBootstrapScript } from "@/lib/motion";
 
-const fraunces = Fraunces({
-  variable: "--font-display",
+/*
+  Typographie : Archivo (grotesque à forte personnalité, très serré en gros
+  corps) pour toute la titraille et les micro-labels ; Inter pour le texte
+  courant. Deux familles, aucune fioriture — c'est le contraste de graisse et
+  d'échelle qui porte la hiérarchie, pas la variété des polices.
+*/
+const archivo = Archivo({
+  variable: "--font-archivo",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  style: ["normal", "italic"],
   display: "swap",
 });
 
 const inter = Inter({
-  variable: "--font-body",
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
-const siteUrl = "https://ksmultiservices.fr";
+const title = "Dépannage d'urgence au Havre — Serrurier, Plombier, Vitrier | KS Multiservices";
+const description =
+  "KS Multiservices intervient au Havre et alentours pour vos urgences de serrurerie, plomberie et vitrerie. Porte claquée, fuite d'eau, vitre cassée : appelez le 06 38 98 78 30.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "KS Multiservices — Plombier, Serrurier, Vitrier au Havre (24h/24)",
-    template: "%s — KS Multiservices",
+    default: title,
+    template: "%s | KS Multiservices",
   },
-  description:
-    "Plomberie, serrurerie et vitrerie au Havre, disponible 24h/24 et 7j/7 y compris les jours fériés. KS Multiservices intervient rapidement pour vos urgences et vos travaux de rénovation.",
+  description,
+  applicationName: business.name,
+  authors: [{ name: business.name }],
   keywords: [
-    "plombier Le Havre",
-    "serrurier Le Havre",
-    "vitrier Le Havre",
     "dépannage urgence Le Havre",
-    "rénovation salle de bain Le Havre",
+    "serrurier Le Havre",
+    "plombier Le Havre",
+    "vitrier Le Havre",
+    "dépannage serrurerie Le Havre",
+    "dépannage plomberie Le Havre",
+    "dépannage vitrerie Le Havre",
   ],
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "KS Multiservices — Plombier, Serrurier, Vitrier au Havre",
-    description:
-      "Urgences plomberie, serrurerie et vitrerie au Havre, 24h/24 et 7j/7. Intervention rapide et travaux de rénovation.",
-    url: siteUrl,
-    siteName: "KS Multiservices",
-    locale: "fr_FR",
     type: "website",
+    locale: "fr_FR",
+    url: siteUrl,
+    siteName: business.name,
+    title,
+    description,
   },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  formatDetection: { telephone: true },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#0e0f12",
+  colorScheme: "dark light",
+};
+
+/**
+ * Données structurées.
+ * Elles ne décrivent que des faits vérifiés : raison sociale, téléphone,
+ * adresse, disponibilité, prestations et communes annoncées. Aucune note, aucun
+ * avis, aucun tarif n'est déclaré tant que ces informations ne sont pas réelles.
+ */
 const localBusinessJsonLd = {
   "@context": "https://schema.org",
   "@type": "HomeAndConstructionBusiness",
+  "@id": `${siteUrl}/#business`,
   name: business.name,
-  telephone: business.phone,
+  description,
+  url: siteUrl,
+  telephone: business.phoneHref,
   address: {
     "@type": "PostalAddress",
     streetAddress: business.address.line1,
     postalCode: business.address.postalCode,
     addressLocality: business.address.city,
-    addressCountry: "FR",
+    addressCountry: business.address.country,
   },
-  areaServed: {
-    "@type": "City",
-    name: "Le Havre",
-  },
+  areaServed: [
+    { "@type": "City", name: serviceArea.city },
+    ...serviceArea.towns.map((town) => ({ "@type": "City", name: town.name })),
+  ],
   openingHoursSpecification: {
     "@type": "OpeningHoursSpecification",
     dayOfWeek: [
@@ -76,22 +109,32 @@ const localBusinessJsonLd = {
     opens: "00:00",
     closes: "23:59",
   },
-  makesOffer: [
-    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Plomberie" } },
-    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Serrurerie" } },
-    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Vitrerie" } },
-  ],
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Interventions KS Multiservices",
+    itemListElement: serviceCategories.map((category) => ({
+      "@type": "OfferCatalog",
+      name: category.name,
+      itemListElement: category.items.map((item) => ({
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: item.label },
+      })),
+    })),
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="fr"
-      className={`${fraunces.variable} ${inter.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col bg-paper text-[color:var(--color-text-on-light)]">
-        <a href="#contenu-principal" className="skip-link">
-          Aller au contenu principal
+    <html lang="fr" className={`${archivo.variable} ${inter.variable}`}>
+      <head>
+        {/* Active le mode animé avant le premier rendu — voir lib/motion.ts */}
+        <script dangerouslySetInnerHTML={{ __html: motionBootstrapScript }} />
+      </head>
+      <body>
+        {/* Écran d'attente de l'introduction — voir globals.css et IntroSequence */}
+        <div id="ks-intro-shield" aria-hidden="true" />
+        <a href="#contenu" className="skip-link">
+          Aller au contenu
         </a>
         {children}
         <script

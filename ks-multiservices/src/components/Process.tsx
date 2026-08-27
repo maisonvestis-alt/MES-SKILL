@@ -1,85 +1,87 @@
-"use client";
+import { PhoneCall } from "@phosphor-icons/react/dist/ssr";
+import { business, processSteps } from "@/lib/content";
+import SectionHeading from "./SectionHeading";
 
-import { useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-import { processSteps } from "@/lib/content";
-
-gsap.registerPlugin(ScrollTrigger);
-
+/**
+ * Processus d'intervention.
+ * Le rail vertical se remplit d'orange au fil du scroll (ScrollTrigger scrubé) :
+ * l'animation raconte littéralement l'avancement de l'intervention.
+ */
 export default function Process() {
-  const scope = useRef<HTMLDivElement>(null);
-
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.from("[data-process-line]", {
-          scaleY: 0,
-          transformOrigin: "top",
-          duration: 1,
-          ease: "power2.out",
-          scrollTrigger: { trigger: scope.current, start: "top 70%", end: "bottom 80%", scrub: 0.6 },
-        });
-        gsap.utils.toArray<HTMLElement>("[data-process-step]").forEach((el, i) => {
-          gsap.from(el, {
-            x: -20,
-            opacity: 0,
-            duration: 0.5,
-            ease: "power2.out",
-            delay: i * 0.05,
-            scrollTrigger: { trigger: el, start: "top 85%" },
-          });
-        });
-      });
-      return () => mm.revert();
-    },
-    { scope }
-  );
-
   return (
-    <section id="intervention" ref={scope} className="bg-ink py-24 md:py-32">
+    <section id="processus" className="section bg-[color:var(--color-ink)]">
       <div className="container-page">
-        <div className="max-w-2xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[color:var(--color-brass)]">
-            Comment ça se passe
-          </p>
-          <h2 className="mt-4 font-display text-3xl font-semibold text-[color:var(--color-text-on-dark)] sm:text-4xl">
-            Cinq étapes, du premier appel à la solution
-          </h2>
-        </div>
+        <SectionHeading
+          index="04"
+          eyebrow="Déroulé"
+          tone="dark"
+          title={
+            <>
+              De votre appel à la <span className="text-[color:var(--color-signal)]">résolution</span>
+            </>
+          }
+          intro="Quatre étapes, sans zone d'ombre : vous savez à tout moment où en est votre dépannage."
+        />
 
-        <div className="relative mt-16 grid gap-10 md:grid-cols-[2rem_1fr] md:gap-x-8">
-          <div className="relative hidden md:block">
-            <div
+        <div className="mt-16 grid gap-12 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)] lg:gap-20">
+          <ol data-progress-track className="relative flex flex-col gap-12 pl-10 sm:gap-16 sm:pl-14">
+            {/* Rail + progression */}
+            <span
               aria-hidden="true"
-              className="absolute left-1/2 top-2 h-full w-px -translate-x-1/2 bg-[color:var(--color-border-dark)]"
+              className="absolute left-[7px] top-2 h-[calc(100%-1rem)] w-px bg-[color:var(--line-dark)] sm:left-[11px]"
             />
-            <div
-              data-process-line
+            <span
               aria-hidden="true"
-              className="absolute left-1/2 top-2 h-full w-px -translate-x-1/2 bg-[color:var(--color-brass)]"
+              data-progress
+              className="absolute left-[7px] top-2 h-[calc(100%-1rem)] w-px origin-top bg-[color:var(--color-signal)] sm:left-[11px]"
+              style={{ transform: "scaleY(0)" }}
             />
-          </div>
 
-          <ol className="flex flex-col gap-10 md:col-start-2 md:gap-14">
-            {processSteps.map((item) => (
-              <li key={item.step} data-process-step className="flex gap-5">
-                <span className="font-display shrink-0 text-3xl font-semibold text-[color:var(--color-brass)] sm:text-4xl">
-                  {item.step}
+            {processSteps.map((step, i) => (
+              <li key={step.step} data-reveal data-reveal-delay={String(0.04 * i)} className="relative">
+                <span
+                  aria-hidden="true"
+                  className="absolute -left-10 top-1.5 flex h-[15px] w-[15px] items-center justify-center rounded-full border-2 border-[color:var(--color-signal)] bg-[color:var(--color-ink)] sm:-left-14 sm:h-[23px] sm:w-[23px]"
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--color-signal)]" />
                 </span>
-                <div>
-                  <h3 className="font-display text-lg font-semibold text-[color:var(--color-text-on-dark)] sm:text-xl">
-                    {item.title}
-                  </h3>
-                  <p className="mt-1.5 max-w-md text-sm leading-relaxed text-[color:var(--color-text-on-dark-muted)] sm:text-base">
-                    {item.description}
-                  </p>
-                </div>
+
+                <span className="font-display text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-[color:var(--text-on-dark-muted)]">
+                  Étape {step.step}
+                </span>
+                <h3 className="mt-3 text-[1.5rem] text-[color:var(--text-on-dark)] sm:text-[1.9rem]">
+                  {step.title}
+                </h3>
+                <p className="mt-3 max-w-xl text-[0.98rem] leading-relaxed text-[color:var(--text-on-dark-muted)]">
+                  {step.description}
+                </p>
               </li>
             ))}
           </ol>
+
+          <aside
+            data-reveal
+            className="notch h-fit border border-[color:var(--line-dark)] bg-[color:var(--color-steel)] p-7 lg:sticky lg:top-32"
+          >
+            <p className="font-display text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-[color:var(--color-signal)]">
+              L&apos;étape la plus rapide
+            </p>
+            <p className="mt-4 text-[1.05rem] leading-relaxed text-[color:var(--text-on-dark)]">
+              Tout commence par un appel. En quelques questions, nous savons quoi
+              emporter et quand nous pouvons être chez vous.
+            </p>
+            <a
+              href={`tel:${business.phoneHref}`}
+              className="btn btn-signal mt-7 w-full"
+              data-cta="process-call"
+            >
+              <PhoneCall size={18} weight="fill" aria-hidden="true" />
+              {business.phone}
+            </a>
+            <p className="mt-4 text-center text-[0.78rem] text-[color:var(--text-on-dark-muted)]">
+              {business.availability}
+            </p>
+          </aside>
         </div>
       </div>
     </section>

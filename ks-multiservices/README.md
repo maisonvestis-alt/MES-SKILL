@@ -1,54 +1,107 @@
-# KS Multiservices — Site premium
+# KS Multiservices — site premium
 
-Site vitrine premium pour KS Multiservices (plomberie, serrurerie, vitrerie, Le
-Havre), Next.js 16 (App Router) + TypeScript + Tailwind CSS v4 + GSAP.
+Site vitrine pour **KS Multiservices** — dépannage d'urgence en serrurerie,
+plomberie et vitrerie au Havre.
+Next.js 16 (App Router) · TypeScript · Tailwind CSS v4 · GSAP + ScrollTrigger.
 
-## Démarrer en local
+## Démarrer
 
 ```bash
 npm install
-npm run dev
+npm run dev      # développement
+npm run build    # build de production
+npm run start    # sert le build
+npm run lint
 ```
 
-Build de production :
+## Architecture
 
-```bash
-npm run build
-npm run start
+```
+src/
+  app/
+    layout.tsx                     métadonnées globales, polices, JSON-LD LocalBusiness
+    page.tsx                       page d'accueil (assemblage des sections)
+    serrurerie|plomberie|vitrerie/ pages métier (SEO local, une URL par métier)
+    mentions-legales/ politique-confidentialite/
+    api/contact/route.ts           réception du formulaire de devis
+    opengraph-image.tsx            image de partage générée (next/og)
+    sitemap.ts robots.ts
+  components/                      une section = un composant
+  lib/
+    content.ts                     ⭐ source unique de vérité du contenu
+    motion.ts                      utilitaires de mouvement + script inline
 ```
 
-## Contenu réel — source unique de vérité
+**Les sections sont des Server Components.** Elles posent des attributs
+`data-reveal` / `data-parallax` / `data-progress` sur leur markup ; un unique
+composant client, `ScrollMotion`, câble toutes les animations de scroll. GSAP
+n'est donc chargé qu'une fois et le HTML reste rendu côté serveur.
 
-Toutes les informations affichées (téléphone, adresse, horaires, services)
-viennent de `src/lib/content.ts`. Ne jamais coder une donnée métier en dur
-ailleurs dans les composants.
+Composants clients : `ScrollMotion`, `IntroSequence`, `Header` (menu mobile),
+`Gallery` (filtres + visionneuse), `ContactForm`.
 
-## À finaliser avant mise en ligne
+## Contenu — source unique de vérité
 
-Ces éléments n'ont volontairement **pas été inventés** (voir la consigne
-"n'invente aucune information") et doivent être complétés :
+Tout ce qui est affiché vient de `src/lib/content.ts` : coordonnées,
+prestations, zone d'intervention, avis, galerie, navigation. **Ne jamais coder
+une donnée métier en dur dans un composant.**
 
-1. **Réalisations** (`src/components/Gallery.tsx`, `src/lib/content.ts` →
-   `galleryItems`) : les 3 photos de rénovation de salle de bain transmises
-   n'ont pas pu être récupérées comme fichiers exploitables dans cette
-   session. Ajoutez-les dans `public/gallery/` puis renseignez `src` pour
-   chaque entrée — le composant bascule automatiquement de l'état "Ajout en
-   cours" à la vraie photo.
-2. **Mentions légales** (`src/app/mentions-legales/page.tsx`) : SIRET, forme
-   juridique, directeur de publication et hébergeur sont marqués
-   `à compléter`. Obligatoire légalement avant mise en ligne.
-3. **Email de contact** : aucune adresse n'a été fournie. Le formulaire
-   (`src/app/api/contact/route.ts`) journalise les demandes côté serveur mais
-   ne les transmet à personne pour l'instant — brancher un envoi email/SMS/CRM
-   réel dès que l'adresse est connue.
-4. **Avis clients / chiffres** : aucun avis ni statistique réelle n'a été
-   fourni, donc aucun n'est affiché. À ajouter dans `src/lib/content.ts` dès
-   qu'ils sont disponibles (ne jamais en inventer).
-5. Vérifier la zone d'intervention exacte (communes précises autour du Havre)
-   si elle doit être plus détaillée que "Le Havre et son agglomération".
+Règle tenue dans tout le projet : aucune information n'est inventée. Un champ
+inconnu reste marqué comme à compléter plutôt que rempli d'une valeur
+plausible.
+
+## À finaliser avant la mise en ligne
+
+| # | Quoi | Où |
+|---|------|-----|
+| 1 | **Avis clients** — les 3 avis sont des placeholders explicites. Les remplacer par de vrais témoignages, puis passer `testimonialsArePlaceholders` à `false` (le bandeau d'avertissement de la section disparaît alors). Aucune note n'est déclarée en schema.org tant que les avis ne sont pas réels. | `src/lib/content.ts` → `testimonials` |
+| 2 | **Photos** — galerie avant/après et visuels métier. Déposer les fichiers dans `public/gallery/` et `public/services/`, puis renseigner `before` / `after` et `image`. Les panneaux graphiques actuels s'effacent automatiquement au profit des vraies photos, sans toucher au code. | `src/lib/content.ts` → `galleryItems`, `serviceCategories[].image` |
+| 3 | **Mentions légales** — forme juridique, SIRET, directeur de la publication, hébergeur. Obligatoire légalement. | `src/app/mentions-legales/page.tsx` |
+| 4 | **Destinataire du formulaire** — l'API valide et journalise la demande mais ne l'envoie à personne : brancher un email transactionnel, un SMS ou un CRM dès que l'adresse est connue. | `src/app/api/contact/route.ts` |
+| 5 | **Zone d'intervention** — quartiers et communes sont des lieux réels du Havre et de son agglomération, à confirmer comme périmètre réellement desservi. Ajouter ou retirer une entrée met à jour la section, le schéma et les données structurées. | `src/lib/content.ts` → `serviceArea` |
+| 6 | **Nom de domaine** — `siteUrl` sert de base aux URL canoniques, au sitemap et aux données structurées. | `src/lib/content.ts` → `siteUrl` |
 
 ## Direction artistique
 
-Base graphite/encre + accent laiton brossé (plutôt que le bleu/orange
-générique proposé par défaut), typographie Fraunces (titres) / Inter (corps).
-Détails dans `src/app/globals.css`.
+« Signal sur acier » : base encre/anthracite (métal, sécurité, sérieux),
+respiration en gris très clair, et un **unique accent orange signal** traité
+comme une signalétique d'urgence — jamais en dégradé décoratif, toujours pour
+désigner l'action. Contrastes francs, aucune ombre lourde : la hiérarchie vient
+du filet, de l'espace et du poids typographique.
+
+Typographie **Archivo** (titraille, micro-labels) / **Inter** (texte courant).
+Tokens, boutons, coins coupés et textures : `src/app/globals.css`.
+
+Motifs récurrents qui font tenir l'ensemble : le repère chiffré de section
+(`01 — URGENCES`), le filet orange, le coin coupé (`.notch`), la grille
+technique sur les fonds sombres, et le module « ligne d'urgence ».
+
+## Animations
+
+- **Introduction** (`IntroSequence`) : goupilles de barillet qui tombent,
+  cylindre qui pivote, arc orange, rideau qui s'ouvre. ~1,4 s sur ordinateur,
+  ~1 s sur mobile, une seule fois par session, bouton « Passer ».
+  Un écran d'attente rendu côté serveur (`#ks-intro-shield`) couvre la page dès
+  la première peinture pour éviter que le hero ne clignote avant l'hydratation.
+- **Scroll** (`ScrollMotion`) : apparitions, parallaxe légère, rail de
+  progression du processus, barre de lecture de l'en-tête.
+- `prefers-reduced-motion` : l'introduction ne joue pas, rien n'est masqué,
+  toutes les transitions sont neutralisées.
+- Sans JavaScript : le contenu s'affiche normalement — les animations sont un
+  supplément, jamais une condition d'affichage.
+
+## SEO
+
+- Une URL par métier (`/serrurerie`, `/plomberie`, `/vitrerie`) avec `title`,
+  `description`, canonique et données structurées `Service` + `BreadcrumbList`.
+- `HomeAndConstructionBusiness` (raison sociale, téléphone, adresse,
+  disponibilité, catalogue de prestations, communes desservies) dans le layout.
+- `sitemap.xml`, `robots.txt`, Open Graph et image de partage générée.
+- Titres H1/H2/H3 hiérarchisés, une seule H1 par page.
+
+## Accessibilité
+
+Lien d'évitement, focus visible sur tous les éléments interactifs, menu et
+visionneuse pilotables au clavier (Échap, flèches), `aria-live` sur le retour
+du formulaire, cibles tactiles confortables, contrastes vérifiés sur fond clair
+comme sur fond sombre.

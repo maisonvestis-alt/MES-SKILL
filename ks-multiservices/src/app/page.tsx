@@ -1,41 +1,46 @@
-"use client";
-
-import { useCallback, useState } from "react";
 import IntroSequence from "@/components/IntroSequence";
+import ScrollMotion from "@/components/ScrollMotion";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import Emergency from "@/components/Emergency";
 import Services from "@/components/Services";
-import Process from "@/components/Process";
 import WhyUs from "@/components/WhyUs";
+import Process from "@/components/Process";
 import ServiceArea from "@/components/ServiceArea";
+import Testimonials from "@/components/Testimonials";
 import Gallery from "@/components/Gallery";
+import Contact from "@/components/Contact";
 import FinalCta from "@/components/FinalCta";
 import Footer from "@/components/Footer";
-import MobileCallButton from "@/components/MobileCallButton";
+import MobileCallBar from "@/components/MobileCallBar";
 
+/**
+ * Page d'accueil.
+ *
+ * L'overlay d'introduction est un calque : il se démonte une fois joué, et le
+ * contenu réel de la page est rendu dès le premier octet — donc lisible par les
+ * moteurs, par les lecteurs d'écran et sans JavaScript.
+ */
 export default function Home() {
-  // introDone ne sert plus qu'à démonter l'overlay une fois sa transition finie —
-  // le contenu réel ci-dessous reste toujours visible dans le HTML, y compris sans
-  // JavaScript ou pendant le chargement : l'intro est un calque par-dessus, jamais
-  // une condition d'affichage du site.
-  const [introVisible, setIntroVisible] = useState(true);
-  const handleIntroDone = useCallback(() => setIntroVisible(false), []);
-
   return (
     <>
-      {introVisible && <IntroSequence onDone={handleIntroDone} />}
+      <IntroSequence />
+      <ScrollMotion />
       <Header />
-      <main id="contenu-principal">
+      <main id="contenu">
         <Hero />
+        <Emergency />
         <Services />
-        <Process />
         <WhyUs />
+        <Process />
         <ServiceArea />
+        <Testimonials />
         <Gallery />
+        <Contact />
         <FinalCta />
       </main>
       <Footer />
-      <MobileCallButton />
+      <MobileCallBar />
     </>
   );
 }
