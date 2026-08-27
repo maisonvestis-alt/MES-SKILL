@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
-import { business } from "@/lib/content";
+import { business, reviews, serviceAreaGroups, serviceCategories } from "@/lib/content";
 
 const fraunces = Fraunces({
   variable: "--font-display",
@@ -27,22 +27,26 @@ export const metadata: Metadata = {
     template: "%s — KS Multiservices",
   },
   description:
-    "Plomberie, serrurerie et vitrerie au Havre, disponible 24h/24 et 7j/7 y compris les jours fériés. KS Multiservices intervient rapidement pour vos urgences et vos travaux de rénovation.",
+    "Plomberie, serrurerie et vitrerie au Havre, disponible 24h/24 et 7j/7 y compris les jours fériés. Intervention en moins de 45 minutes, devis gratuit. 4,6/5 sur 125 avis.",
   keywords: [
     "plombier Le Havre",
     "serrurier Le Havre",
     "vitrier Le Havre",
     "dépannage urgence Le Havre",
     "rénovation salle de bain Le Havre",
+    "serrurier Honfleur",
+    "plombier Fécamp",
+    "vitrier Rouen",
   ],
   openGraph: {
     title: "KS Multiservices — Plombier, Serrurier, Vitrier au Havre",
     description:
-      "Urgences plomberie, serrurerie et vitrerie au Havre, 24h/24 et 7j/7. Intervention rapide et travaux de rénovation.",
+      "Urgences plomberie, serrurerie et vitrerie au Havre, 24h/24 et 7j/7. Intervention en moins de 45 minutes, devis gratuit.",
     url: siteUrl,
     siteName: "KS Multiservices",
     locale: "fr_FR",
     type: "website",
+    images: [{ url: "/logo.jpg", width: 586, height: 486, alt: "KS Multiservices" }],
   },
 };
 
@@ -51,6 +55,8 @@ const localBusinessJsonLd = {
   "@type": "HomeAndConstructionBusiness",
   name: business.name,
   telephone: business.phone,
+  email: business.email,
+  image: `${siteUrl}/logo.jpg`,
   address: {
     "@type": "PostalAddress",
     streetAddress: business.address.line1,
@@ -58,9 +64,13 @@ const localBusinessJsonLd = {
     addressLocality: business.address.city,
     addressCountry: "FR",
   },
-  areaServed: {
-    "@type": "City",
-    name: "Le Havre",
+  areaServed: serviceAreaGroups.flatMap((group) =>
+    group.communes.map((commune) => ({ "@type": "City", name: commune }))
+  ),
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: reviews.rating,
+    reviewCount: reviews.count,
   },
   openingHoursSpecification: {
     "@type": "OpeningHoursSpecification",
@@ -76,11 +86,11 @@ const localBusinessJsonLd = {
     opens: "00:00",
     closes: "23:59",
   },
-  makesOffer: [
-    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Plomberie" } },
-    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Serrurerie" } },
-    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Vitrerie" } },
-  ],
+  makesOffer: serviceCategories.map((category) => ({
+    "@type": "Offer",
+    url: `${siteUrl}/services/${category.slug}`,
+    itemOffered: { "@type": "Service", name: category.name },
+  })),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

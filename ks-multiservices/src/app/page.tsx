@@ -4,11 +4,14 @@ import { useCallback, useState } from "react";
 import IntroSequence from "@/components/IntroSequence";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import StatsBar from "@/components/StatsBar";
 import Services from "@/components/Services";
+import Pricing from "@/components/Pricing";
 import Process from "@/components/Process";
 import WhyUs from "@/components/WhyUs";
 import ServiceArea from "@/components/ServiceArea";
 import Gallery from "@/components/Gallery";
+import Faq from "@/components/Faq";
 import FinalCta from "@/components/FinalCta";
 import Footer from "@/components/Footer";
 import MobileCallButton from "@/components/MobileCallButton";
@@ -27,11 +30,14 @@ export default function Home() {
       <Header />
       <main id="contenu-principal">
         <Hero />
+        <StatsBar />
         <Services />
+        <Pricing />
         <Process />
         <WhyUs />
         <ServiceArea />
         <Gallery />
+        <Faq />
         <FinalCta />
       </main>
       <Footer />

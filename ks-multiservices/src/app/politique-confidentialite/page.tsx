@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function PrivacyPolicyPage() {
   return (
     <main id="contenu-principal" className="mx-auto max-w-3xl px-5 py-24 md:py-32">
-      <Link href="/" className="text-sm font-medium text-[color:var(--color-brass-strong)]">
+      <Link href="/" className="text-sm font-medium text-[color:var(--color-accent-strong)]">
         ← Retour à l&apos;accueil
       </Link>
       <h1 className="font-display mt-6 text-3xl font-semibold">

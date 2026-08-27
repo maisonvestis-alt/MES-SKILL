@@ -6,6 +6,7 @@ export const business = {
   name: "KS Multiservices",
   phone: "06 38 98 78 30",
   phoneHref: "+33638987830",
+  email: "ksmultiservice.contact@gmail.fr",
   address: {
     line1: "2 All. François Mauriac",
     postalCode: "76610",
@@ -13,11 +14,40 @@ export const business = {
     full: "2 All. François Mauriac, 76610 Le Havre",
   },
   availability: "Disponible 24h/24 et 7j/7, y compris les jours fériés",
+  quoteDisclaimer: "Devis gratuit",
+  responsePromise: "Intervention en moins de 45 minutes",
   serviceArea: {
     base: "Le Havre",
     note: "Le Havre et son agglomération — contactez-nous pour confirmer votre commune",
   },
 } as const;
+
+// Informations légales transmises par le client (extrait registre / SIRENE).
+// Le directeur de publication et l'hébergeur restent à compléter : non fournis.
+export const legalInfo = {
+  raisonSociale: "KS MULTISERVICES",
+  formeJuridique: "SAS (Société par actions simplifiée)",
+  siren: "953 817 491",
+  siret: "953 817 491 00012",
+  apeCode: "43.22A",
+  apeLabel: "Travaux d'installation d'eau et de gaz en tous locaux",
+  tvaIntracommunautaire: "FR15 953 817 491",
+  dateCreation: "27 juin 2023",
+} as const;
+
+// Avis clients — chiffre actuel de la fiche d'établissement locale (le plus à jour).
+export const reviews = {
+  rating: 4.6,
+  count: 125,
+  source: "avis Google",
+} as const;
+
+export const trustStats = [
+  { label: "Intervention en moins de", value: "45 min" },
+  { label: "Disponibilité", value: "24h/24 · 7j/7" },
+  { label: "Devis", value: "Gratuit" },
+  { label: `${reviews.rating}/5 sur ${reviews.count} ${reviews.source}`, value: `${reviews.rating}★` },
+] as const;
 
 export type ServiceItem = {
   slug: string;
@@ -29,6 +59,7 @@ export type ServiceCategory = {
   name: string;
   shortLabel: string;
   description: string;
+  pageIntro: string;
   items: ServiceItem[];
 };
 
@@ -40,12 +71,17 @@ export const serviceCategories: ServiceCategory[] = [
     shortLabel: "Plomberie",
     description:
       "Fuites, canalisations bouchées, chauffe-eau en panne : une intervention rapide pour éviter que le problème ne s'aggrave.",
+    pageIntro:
+      "Une fuite qui s'aggrave, des toilettes bouchées, un chauffe-eau en panne : chaque minute compte. KS Multiservices intervient au Havre et dans son agglomération en moins de 45 minutes, 24h/24 et 7j/7, pour tous vos dépannages de plomberie — du simple débouchage aux travaux sanitaires complets et à la rénovation de salle de bain.",
     items: [
       { slug: "debouchage-wc", label: "Débouchage WC" },
       { slug: "debouchage-canalisation", label: "Débouchage canalisation" },
-      { slug: "recherche-fuite-deau", label: "Recherche de fuite d'eau" },
-      { slug: "reparation-fuite-deau", label: "Réparation de fuite d'eau" },
-      { slug: "reparation-chauffe-eau", label: "Réparation chauffe-eau" },
+      { slug: "recherche-fuite-deau", label: "Recherche de fuite" },
+      { slug: "reparation-fuite-deau", label: "Réparation de fuite" },
+      { slug: "reparation-chauffe-eau", label: "Réparation de chauffe-eau" },
+      { slug: "depannage-plomberie", label: "Dépannage plomberie" },
+      { slug: "travaux-sanitaires", label: "Travaux sanitaires" },
+      { slug: "renovation-creation-salle-de-bain", label: "Rénovation / création de salle de bain" },
     ],
   },
   {
@@ -54,12 +90,18 @@ export const serviceCategories: ServiceCategory[] = [
     shortLabel: "Serrurerie",
     description:
       "Porte claquée, serrure forcée, sécurisation après effraction : une remise en sécurité rapide de votre logement.",
+    pageIntro:
+      "Porte claquée devant chez vous, serrure forcée après une tentative d'effraction, besoin de sécuriser votre logement : KS Multiservices intervient au Havre et dans son agglomération en moins de 45 minutes, 24h/24 et 7j/7, pour ouvrir, réparer ou sécuriser votre porte sans dégât inutile.",
     items: [
       { slug: "ouverture-de-porte-claquee", label: "Ouverture de porte claquée" },
       { slug: "ouverture-de-porte-blindee", label: "Ouverture de porte blindée" },
       { slug: "changement-de-serrure", label: "Changement de serrure" },
+      { slug: "changement-cylindre-barillet", label: "Changement de cylindre / barillet" },
       { slug: "reparation-apres-effraction", label: "Réparation après effraction" },
       { slug: "securisation-apres-cambriolage", label: "Sécurisation après cambriolage" },
+      { slug: "mise-en-securite", label: "Mise en sécurité" },
+      { slug: "serrures-multipoints", label: "Serrures multipoints" },
+      { slug: "solutions-de-securite", label: "Solutions de sécurité" },
     ],
   },
   {
@@ -68,18 +110,20 @@ export const serviceCategories: ServiceCategory[] = [
     shortLabel: "Vitrerie",
     description:
       "Vitre cassée, double vitrage endommagé, fermeture d'urgence : une protection immédiate de votre habitation.",
+    pageIntro:
+      "Vitre cassée, double vitrage endommagé, bris de glace après une effraction : KS Multiservices intervient au Havre et dans son agglomération en moins de 45 minutes, 24h/24 et 7j/7, pour une mise en sécurité immédiate et un remplacement sur mesure de votre vitrage.",
     items: [
       { slug: "remplacement-de-vitre-cassee", label: "Remplacement de vitre cassée" },
-      {
-        slug: "fermeture-provisoire-apres-effraction",
-        label: "Fermeture provisoire après effraction",
-      },
+      { slug: "double-vitrage", label: "Double vitrage" },
       { slug: "reparation-de-double-vitrage", label: "Réparation de double vitrage" },
-      { slug: "remplacement-de-double-vitrage", label: "Remplacement de double vitrage" },
-      {
-        slug: "pose-de-survitrage-vitrage-isolant",
-        label: "Pose de survitrage / vitrage isolant",
-      },
+      { slug: "remplacement-de-vitrage", label: "Remplacement de vitrage" },
+      { slug: "remplacement-de-vitrine", label: "Remplacement de vitrine" },
+      { slug: "fermeture-provisoire-apres-effraction", label: "Fermeture provisoire après effraction" },
+      { slug: "mise-en-securite-apres-bris-de-glace", label: "Mise en sécurité après bris de glace" },
+      { slug: "vitrage-isolant-survitrage", label: "Vitrage isolant / survitrage" },
+      { slug: "verre-sur-mesure", label: "Verre sur mesure" },
+      { slug: "cremone", label: "Crémone" },
+      { slug: "fenetres-pvc-aluminium", label: "Fenêtres PVC / aluminium" },
     ],
   },
 ];
@@ -90,26 +134,86 @@ export const renovationService = {
     "Au-delà de l'urgence, KS Multiservices conçoit et réalise vos travaux de rénovation de salle de bain : carrelage, douche à l'italienne, receveur, plomberie et finitions.",
 };
 
-// Réalisations transmises par le client. Les fichiers image réels doivent être ajoutés
-// dans /public/gallery/ puis référencés ici (src) — voir README du projet.
+// Tarifs indicatifs transmis par le client — prix de départ, confirmés après diagnostic.
+export type PricingItem = {
+  label: string;
+  price: string;
+};
+
+export type PricingCategory = {
+  categorySlug: string;
+  items: PricingItem[];
+};
+
+export const pricing: PricingCategory[] = [
+  {
+    categorySlug: "plomberie",
+    items: [
+      { label: "Débouchage WC", price: "110 €" },
+      { label: "Débouchage canalisation", price: "150 €" },
+      { label: "Recherche de fuite", price: "150 €" },
+      { label: "Réparation de fuite", price: "85 €" },
+      { label: "Réparation ballon d'eau chaude", price: "150 €" },
+    ],
+  },
+  {
+    categorySlug: "serrurerie",
+    items: [
+      { label: "Ouverture de porte", price: "110 €" },
+      { label: "Ouverture porte blindée", price: "300 €" },
+      { label: "Changement serrure", price: "150 €" },
+      { label: "Réparation après effraction", price: "150 €" },
+      { label: "Sécurisation après cambriolage", price: "150 €" },
+    ],
+  },
+  {
+    categorySlug: "vitrerie",
+    items: [
+      { label: "Vitre simple", price: "100 €" },
+      { label: "Double vitrage", price: "150 €" },
+      { label: "Remplacement vitrine", price: "250 €" },
+      { label: "Mise en sécurité après bris de glace", price: "120 €" },
+      { label: "Découpe et pose de verre sur mesure", price: "130 €" },
+    ],
+  },
+];
+
+export const pricingNote =
+  "Tarifs de départ, hors fournitures spécifiques et sujétions particulières. Devis gratuit et prix confirmé avant toute intervention.";
+
+// Réalisations réelles transmises par le client (rénovations de salles de bain).
 export const galleryItems = [
   {
-    id: "renovation-sdb-1",
-    caption: "Rénovation salle de bain — Le Havre",
-    detail: "Douche à l'italienne, mosaïque sol et vasque suspendue rétroéclairée.",
-    src: null as string | null,
+    id: "renovation-sdb-douche-italienne",
+    caption: "Douche à l'italienne en travertin",
+    detail: "Colonne de douche thermostatique, niches de rangement carrelées et faïence pierre naturelle.",
+    src: "/gallery/douche-italienne-travertin.jpg",
+    width: 900,
+    height: 1175,
   },
   {
-    id: "renovation-sdb-2",
-    caption: "Rénovation salle de bain — Le Havre",
-    detail: "Douche à l'italienne, niches de rangement carrelées et faïence pierre naturelle.",
-    src: null as string | null,
+    id: "renovation-sdb-baignoire-carreaux-ciment",
+    caption: "Salle de bain baignoire encastrée",
+    detail: "Baignoire habillée de carreaux de ciment, vasque suspendue et miroir rétroéclairé sur mesure.",
+    src: "/gallery/salle-de-bain-baignoire-carreaux-ciment.jpg",
+    width: 900,
+    height: 1481,
   },
   {
-    id: "renovation-sdb-3",
-    caption: "Rénovation salle de bain — Le Havre",
-    detail: "Paroi de douche vitrée sur mesure, habillage bois et receveur extra-plat.",
-    src: null as string | null,
+    id: "renovation-sdb-douche-vitree-bois",
+    caption: "Douche vitrée sur mesure",
+    detail: "Paroi de douche coulissante vitrée, habillage imitation bois et receveur extra-plat.",
+    src: "/gallery/douche-vitree-bois.jpg",
+    width: 900,
+    height: 1156,
+  },
+  {
+    id: "renovation-sdb-vasque-bois-miroir-led",
+    caption: "Vasque suspendue et miroir LED",
+    detail: "Meuble vasque bois clair, miroir lumineux sur mesure et colonne de rangement assortie.",
+    src: "/gallery/vasque-bois-miroir-led.jpg",
+    width: 900,
+    height: 1171,
   },
 ];
 
@@ -127,7 +231,7 @@ export const processSteps = [
   {
     step: "03",
     title: "Intervention rapide",
-    description: "Déplacement sur Le Havre et son agglomération, dans les meilleurs délais.",
+    description: "Déplacement sur Le Havre et son agglomération, en moins de 45 minutes.",
   },
   {
     step: "04",
@@ -144,9 +248,9 @@ export const processSteps = [
 // Arguments réels, déduits uniquement des informations fournies (pas de chiffres inventés).
 export const differentiators = [
   {
-    title: "Trois métiers, un seul interlocuteur",
+    title: "Intervention en moins de 45 minutes",
     description:
-      "Plomberie, serrurerie et vitrerie réunies sous un même numéro : plus besoin de chercher un artisan différent pour chaque urgence.",
+      "Une urgence plomberie, serrurerie ou vitrerie ? Notre équipe se déplace rapidement sur Le Havre et son agglomération.",
   },
   {
     title: "Disponible jour et nuit",
@@ -154,13 +258,108 @@ export const differentiators = [
       "24h/24, 7j/7, jours fériés compris — une urgence n'attend pas les horaires de bureau.",
   },
   {
-    title: "Ancré au Havre",
+    title: "Devis gratuit et tarifs transparents",
     description:
-      "Basé au Havre, pour une intervention locale sans délai de trajet démesuré.",
+      "Un devis gratuit avant toute intervention, avec des tarifs de départ annoncés clairement, sans surprise.",
   },
   {
-    title: "De l'urgence au chantier",
+    title: `${reviews.rating}/5 sur ${reviews.count} avis`,
     description:
-      "Du dépannage express à la rénovation complète de salle de bain, un seul partenaire du premier appel à la dernière finition.",
+      "Depuis 2022, plus de 1000 clients font confiance à KS Multiservices pour leurs urgences et leurs travaux.",
   },
 ] as const;
+
+export type ServiceAreaGroup = {
+  title: string;
+  communes: string[];
+};
+
+// Zones d'intervention transmises par le client, regroupées par secteur géographique.
+export const serviceAreaGroups: ServiceAreaGroup[] = [
+  {
+    title: "Secteur principal — Le Havre et agglomération",
+    communes: [
+      "Le Havre",
+      "Sainte-Adresse",
+      "Montivilliers",
+      "Harfleur",
+      "Gonfreville-l'Orcher",
+      "Gainneville",
+      "Rogerville",
+      "Oudalle",
+      "Sandouville",
+      "Épouville",
+      "Fontaine-la-Mallet",
+      "Octeville-sur-Mer",
+      "Cauville-sur-Mer",
+      "Manéglise",
+      "Saint-Martin-du-Manoir",
+      "Saint-Laurent-de-Brèvedent",
+      "Rolleville",
+      "Criquetot-l'Esneval",
+    ],
+  },
+  {
+    title: "Côte d'Albâtre et Pays de Caux",
+    communes: ["Étretat", "Fécamp", "Goderville", "Bolbec", "Lillebonne", "Port-Jérôme-sur-Seine", "Yvetot"],
+  },
+  {
+    title: "Estuaire de la Seine et Calvados",
+    communes: [
+      "Honfleur",
+      "Équemauville",
+      "Beuzeville",
+      "Trouville-sur-Mer",
+      "Deauville",
+      "Touques",
+      "Villers-sur-Mer",
+      "Dives-sur-Mer",
+      "Cabourg",
+      "Pont-l'Évêque",
+    ],
+  },
+  {
+    title: "Vers Rouen",
+    communes: ["Bourg-Achard", "Pont-de-l'Arche", "Elbeuf", "Rouen"],
+  },
+];
+
+export type FaqItem = {
+  question: string;
+  answer: string;
+};
+
+// Questions fréquentes, répondues uniquement à partir des informations déjà
+// établies ailleurs sur le site (disponibilité, devis, délai, zone, tarifs).
+export const faqItems: FaqItem[] = [
+  {
+    question: "Intervenez-vous vraiment 24h/24 et 7j/7 ?",
+    answer:
+      "Oui, KS Multiservices intervient 24h/24 et 7j/7, y compris les jours fériés, pour toute urgence de plomberie, serrurerie ou vitrerie.",
+  },
+  {
+    question: "Le devis est-il vraiment gratuit ?",
+    answer:
+      "Oui, le devis est gratuit et sans engagement. Le tarif est confirmé avant toute intervention, à partir des prix de départ indiqués sur cette page.",
+  },
+  {
+    question: "En combien de temps intervenez-vous ?",
+    answer:
+      "Nous nous engageons à intervenir en moins de 45 minutes sur Le Havre et son agglomération. Notre zone d'intervention s'étend aussi à la Côte d'Albâtre, l'estuaire de la Seine et jusqu'à Rouen.",
+  },
+  {
+    question: "Quelles zones couvrez-vous ?",
+    answer:
+      "Le Havre et son agglomération en priorité, ainsi que la Côte d'Albâtre, l'estuaire de la Seine et jusqu'à Rouen. Consultez la page Zone d'intervention pour la liste complète des communes.",
+  },
+  {
+    question: "Les tarifs affichés sont-ils fermes ?",
+    answer:
+      "Les tarifs indiqués sont des prix de départ, hors fournitures spécifiques. Le montant final est confirmé sur place avant toute intervention, dans le cadre du devis gratuit.",
+  },
+  {
+    question: "Faites-vous aussi la rénovation de salle de bain ?",
+    answer:
+      "Oui. Au-delà du dépannage d'urgence, KS Multiservices conçoit et réalise des projets complets de rénovation de salle de bain : carrelage, douche à l'italienne, receveur, plomberie et finitions.",
+  },
+];

@@ -113,8 +113,8 @@ export default function IntroSequence({ onDone }: { onDone: () => void }) {
               width: 220 + i * 26,
               height: 220 + i * 26,
               border: "3px solid",
-              borderColor: i % 2 === 0 ? "var(--color-brass)" : "var(--color-steel)",
-              boxShadow: "0 0 40px rgba(200,154,63,0.25) inset",
+              borderColor: i % 2 === 0 ? "var(--color-accent)" : "var(--color-steel)",
+              boxShadow: "0 0 40px rgba(217,102,46,0.25) inset",
             }}
           />
         ))}
@@ -132,9 +132,9 @@ export default function IntroSequence({ onDone }: { onDone: () => void }) {
         <rect x="52" y="10" width="16" height="46" rx="4" fill="var(--color-steel)" />
         <path
           d="M60 56 L72 96 L60 112 L48 96 Z"
-          fill="var(--color-brass)"
+          fill="var(--color-accent)"
         />
-        <path d="M60 56 L72 96 L60 108 Z" fill="var(--color-brass-strong)" />
+        <path d="M60 56 L72 96 L60 108 Z" fill="var(--color-accent-strong)" />
         {[0, 1, 2, 3, 4].map((i) => (
           <line
             key={i}
@@ -155,7 +155,7 @@ export default function IntroSequence({ onDone }: { onDone: () => void }) {
         className="pointer-events-none absolute inset-0 opacity-0"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,247,225,1) 0%, rgba(200,154,63,0.6) 35%, rgba(18,21,26,0) 70%)",
+            "radial-gradient(circle, rgba(255,247,225,1) 0%, rgba(217,102,46,0.6) 35%, rgba(23,19,15,0) 70%)",
         }}
       />
 
@@ -166,7 +166,7 @@ export default function IntroSequence({ onDone }: { onDone: () => void }) {
           gsap.killTweensOf([containerRef.current, drillRef.current, flashRef.current]);
           onDone();
         }}
-        className="absolute bottom-6 right-6 z-10 rounded-full border border-[color:var(--color-border-dark)] px-4 py-2 text-sm text-[color:var(--color-text-on-dark)] transition hover:border-[color:var(--color-brass)] hover:text-[color:var(--color-brass)] focus-visible:outline focus-visible:outline-3 focus-visible:outline-[color:var(--color-brass)]"
+        className="absolute bottom-6 right-6 z-10 rounded-full border border-[color:var(--color-border-dark)] px-4 py-2 text-sm text-[color:var(--color-text-on-dark)] transition hover:border-[color:var(--color-accent)] hover:text-[color:var(--color-accent)] focus-visible:outline focus-visible:outline-3 focus-visible:outline-[color:var(--color-accent)]"
       >
         Passer l&apos;intro
       </button>

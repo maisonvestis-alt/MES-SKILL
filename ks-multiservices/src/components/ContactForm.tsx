@@ -73,7 +73,7 @@ export default function ContactForm() {
             type="text"
             required
             autoComplete="name"
-            className="w-full rounded-xl border border-[color:var(--color-border-dark)] bg-ink px-4 py-3 text-[color:var(--color-text-on-dark)] outline-none transition focus:border-[color:var(--color-brass)]"
+            className="w-full rounded-xl border border-[color:var(--color-border-dark)] bg-ink px-4 py-3 text-[color:var(--color-text-on-dark)] outline-none transition focus:border-[color:var(--color-accent)]"
           />
         </div>
 
@@ -88,7 +88,7 @@ export default function ContactForm() {
             required
             autoComplete="tel"
             inputMode="tel"
-            className="w-full rounded-xl border border-[color:var(--color-border-dark)] bg-ink px-4 py-3 text-[color:var(--color-text-on-dark)] outline-none transition focus:border-[color:var(--color-brass)]"
+            className="w-full rounded-xl border border-[color:var(--color-border-dark)] bg-ink px-4 py-3 text-[color:var(--color-text-on-dark)] outline-none transition focus:border-[color:var(--color-accent)]"
           />
         </div>
 
@@ -100,7 +100,7 @@ export default function ContactForm() {
             id="service"
             name="service"
             defaultValue=""
-            className="w-full rounded-xl border border-[color:var(--color-border-dark)] bg-ink px-4 py-3 text-[color:var(--color-text-on-dark)] outline-none transition focus:border-[color:var(--color-brass)]"
+            className="w-full rounded-xl border border-[color:var(--color-border-dark)] bg-ink px-4 py-3 text-[color:var(--color-text-on-dark)] outline-none transition focus:border-[color:var(--color-accent)]"
           >
             <option value="" disabled>
               Sélectionnez un service
@@ -124,21 +124,21 @@ export default function ContactForm() {
             name="message"
             rows={4}
             required
-            className="w-full resize-none rounded-xl border border-[color:var(--color-border-dark)] bg-ink px-4 py-3 text-[color:var(--color-text-on-dark)] outline-none transition focus:border-[color:var(--color-brass)]"
+            className="w-full resize-none rounded-xl border border-[color:var(--color-border-dark)] bg-ink px-4 py-3 text-[color:var(--color-text-on-dark)] outline-none transition focus:border-[color:var(--color-accent)]"
           />
         </div>
 
         <button
           type="submit"
           disabled={status === "loading"}
-          className="mt-2 inline-flex items-center justify-center rounded-full bg-[color:var(--color-brass)] px-6 py-3.5 text-base font-semibold text-ink transition hover:bg-[color:var(--color-brass-strong)] disabled:cursor-not-allowed disabled:opacity-60"
+          className="mt-2 inline-flex items-center justify-center rounded-full bg-[color:var(--color-accent)] px-6 py-3.5 text-base font-semibold text-ink transition hover:bg-[color:var(--color-accent-strong)] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {status === "loading" ? "Envoi en cours…" : "Envoyer ma demande"}
         </button>
 
         <div aria-live="polite" id={statusId}>
           {status === "success" && (
-            <p className="flex items-center gap-2 rounded-xl bg-[color:var(--color-brass)]/10 px-4 py-3 text-sm text-[color:var(--color-brass)]">
+            <p className="flex items-center gap-2 rounded-xl bg-[color:var(--color-accent)]/10 px-4 py-3 text-sm text-[color:var(--color-accent)]">
               <CheckCircle size={18} weight="fill" aria-hidden="true" />
               Merci, votre demande a bien été transmise à KS Multiservices.
             </p>
@@ -153,7 +153,7 @@ export default function ContactForm() {
 
         <a
           href={`tel:${business.phoneHref}`}
-          className="mt-1 inline-flex items-center justify-center gap-2 text-sm font-semibold text-[color:var(--color-text-on-dark-muted)] transition hover:text-[color:var(--color-brass)]"
+          className="mt-1 inline-flex items-center justify-center gap-2 text-sm font-semibold text-[color:var(--color-text-on-dark-muted)] transition hover:text-[color:var(--color-accent)]"
         >
           <PhoneCall size={16} aria-hidden="true" />
           Ou appelez directement le {business.phone}

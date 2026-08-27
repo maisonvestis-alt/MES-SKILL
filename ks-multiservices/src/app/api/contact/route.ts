@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { Resend } from "resend";
+import { business } from "@/lib/content";
 
 type ContactPayload = {
   name: string;
@@ -35,9 +37,6 @@ export async function POST(request: Request) {
     );
   }
 
-  // TODO(intégration) : brancher un vrai canal de notification pour KS Multiservices
-  // (email transactionnel, SMS, ou CRM) une fois l'adresse de contact confirmée par
-  // le client — aucune adresse n'a été fournie, donc rien n'est envoyé pour l'instant.
   console.info("[contact] Nouvelle demande KS Multiservices:", {
     name: body.name,
     phone: body.phone,
@@ -45,6 +44,34 @@ export async function POST(request: Request) {
     message: body.message,
     receivedAt: new Date().toISOString(),
   });
+
+  // Envoi email transactionnel via Resend (https://resend.com). Nécessite RESEND_API_KEY
+  // en variable d'environnement — voir README pour la configuration avant mise en ligne.
+  // Sans clé configurée, la demande reste journalisée côté serveur (ci-dessus) sans être
+  // transmise par email.
+  const apiKey = process.env.RESEND_API_KEY;
+  if (apiKey) {
+    try {
+      const resend = new Resend(apiKey);
+      await resend.emails.send({
+        from: process.env.CONTACT_FROM_EMAIL ?? "KS Multiservices <onboarding@resend.dev>",
+        to: business.email,
+        subject: `Nouvelle demande de devis — ${body.service || "site web"}`,
+        text: [
+          `Nom : ${body.name}`,
+          `Téléphone : ${body.phone}`,
+          `Service concerné : ${body.service}`,
+          "",
+          "Message :",
+          body.message,
+        ].join("\n"),
+      });
+    } catch (err) {
+      console.error("[contact] Échec de l'envoi email:", err);
+      // La demande reste journalisée ci-dessus même si l'email échoue : on ne bloque
+      // pas l'utilisateur pour un problème d'intégration côté fournisseur d'email.
+    }
+  }
 
   return NextResponse.json({ ok: true });
 }
