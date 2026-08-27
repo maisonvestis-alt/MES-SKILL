@@ -113,7 +113,7 @@ export default function NotFoundScreen() {
           KS<span className="text-[color:var(--color-brass)]">.</span>Multiservices
         </Link>
 
-        <div className="hidden items-center gap-1 md:flex">
+        <div className="hidden items-center gap-1 lg:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -145,10 +145,10 @@ export default function NotFoundScreen() {
         }`}
         aria-hidden={!menuOpen}
       >
-        <button
-          type="button"
-          tabIndex={menuOpen ? 0 : -1}
-          aria-label="Fermer le menu"
+        {/* Voile de fond : simple raccourci à la souris. Il n'est ni focusable ni
+            annoncé, la fermeture au clavier passant par Échap et le bouton croix. */}
+        <div
+          aria-hidden="true"
           onClick={closeMenu}
           className={`absolute inset-0 h-full w-full bg-black/40 backdrop-blur-sm transition-opacity duration-500 ${
             menuOpen ? "opacity-100" : "opacity-0"
