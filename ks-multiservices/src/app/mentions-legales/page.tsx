@@ -21,10 +21,10 @@ export default function MentionsLegalesPage() {
       <h1 className="font-display mt-6 text-3xl font-semibold">Mentions légales</h1>
 
       <p className="mt-6 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
-        Le nom de l&apos;hébergeur et le directeur de la publication sont marqués{" "}
-        <Placeholder>à compléter</Placeholder> : ces informations n&apos;ont pas été
-        fournies et ne doivent jamais être inventées. Merci de les transmettre pour
-        finaliser la page avant mise en ligne.
+        Le directeur de la publication et l&apos;adresse complète de l&apos;hébergeur
+        sont marqués <Placeholder>à compléter</Placeholder> : ces informations
+        n&apos;ont pas été fournies et ne doivent jamais être inventées. Merci de les
+        transmettre pour finaliser la page avant mise en ligne.
       </p>
 
       <section className="mt-10 space-y-8 text-[color:var(--color-text-on-light-muted)]">
@@ -62,7 +62,7 @@ export default function MentionsLegalesPage() {
             Hébergement
           </h2>
           <p className="mt-2">
-            Nom de l&apos;hébergeur : <Placeholder>à compléter</Placeholder>
+            Nom de l&apos;hébergeur : Vercel Inc.
             <br />
             Adresse : <Placeholder>à compléter</Placeholder>
           </p>
