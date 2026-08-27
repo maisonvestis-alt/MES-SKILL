@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Big_Shoulders, Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { business, reviews, serviceAreaGroups, serviceCategories } from "@/lib/content";
 
-const fraunces = Fraunces({
+const bigShoulders = Big_Shoulders({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  style: ["normal", "italic"],
+  weight: ["600", "700", "800", "900"],
   display: "swap",
 });
 
@@ -15,6 +14,13 @@ const inter = Inter({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const spaceMono = Space_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["400", "700"],
   display: "swap",
 });
 
@@ -97,9 +103,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="fr"
-      className={`${fraunces.variable} ${inter.variable} h-full antialiased`}
+      className={`${bigShoulders.variable} ${inter.variable} ${spaceMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-paper text-[color:var(--color-text-on-light)]">
+      <body className="min-h-full flex flex-col bg-ink text-[color:var(--color-text-on-dark)]">
         <a href="#contenu-principal" className="skip-link">
           Aller au contenu principal
         </a>

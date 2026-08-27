@@ -20,7 +20,12 @@ export const business = {
     base: "Le Havre",
     note: "Le Havre et son agglomération — contactez-nous pour confirmer votre commune",
   },
+  surchargePolicy:
+    "Nos tarifs sont les mêmes de jour comme de nuit, week-end et jours fériés compris — aucune majoration horaire.",
 } as const;
+
+// Moyens de paiement acceptés, transmis par le client.
+export const paymentMethods = ["carte bancaire", "chèque"] as const;
 
 // Informations légales transmises par le client (extrait registre / SIRENE).
 // Le directeur de publication et l'hébergeur restent à compléter : non fournis.
@@ -42,12 +47,18 @@ export const reviews = {
   source: "avis Google",
 } as const;
 
-export const trustStats = [
-  { label: "Intervention en moins de", value: "45 min" },
-  { label: "Disponibilité", value: "24h/24 · 7j/7" },
-  { label: "Devis", value: "Gratuit" },
-  { label: `${reviews.rating}/5 sur ${reviews.count} ${reviews.source}`, value: `${reviews.rating}★` },
-] as const;
+
+// Vidéo hero : à fournir par le client (MP4 + WebM, muette, 8-10s, <2 Mo).
+// En attendant, le hero utilise la meilleure photo réelle comme image plein
+// écran — jamais de vidéo de banque d'images ni de placeholder générique.
+export const heroMedia = {
+  videoMp4: null as string | null,
+  videoWebm: null as string | null,
+  poster: "/gallery/douche-italienne-travertin.jpg",
+  posterAlt: "Douche à l'italienne en travertin réalisée par KS Multiservices au Havre",
+  posterWidth: 900,
+  posterHeight: 1175,
+};
 
 export type ServiceItem = {
   slug: string;
@@ -182,7 +193,19 @@ export const pricingNote =
   "Tarifs de départ, hors fournitures spécifiques et sujétions particulières. Devis gratuit et prix confirmé avant toute intervention.";
 
 // Réalisations réelles transmises par le client (rénovations de salles de bain).
-export const galleryItems = [
+export type GalleryItem = {
+  id: string;
+  caption: string;
+  detail: string;
+  src: string;
+  width: number;
+  height: number;
+  // "Avant" à fournir par le client pour activer le slider comparatif.
+  // Reste `null` tant qu'aucune photo avant-travaux n'est transmise.
+  beforeSrc: string | null;
+};
+
+export const galleryItems: GalleryItem[] = [
   {
     id: "renovation-sdb-douche-italienne",
     caption: "Douche à l'italienne en travertin",
@@ -190,6 +213,7 @@ export const galleryItems = [
     src: "/gallery/douche-italienne-travertin.jpg",
     width: 900,
     height: 1175,
+    beforeSrc: null,
   },
   {
     id: "renovation-sdb-baignoire-carreaux-ciment",
@@ -198,6 +222,7 @@ export const galleryItems = [
     src: "/gallery/salle-de-bain-baignoire-carreaux-ciment.jpg",
     width: 900,
     height: 1481,
+    beforeSrc: null,
   },
   {
     id: "renovation-sdb-douche-vitree-bois",
@@ -206,6 +231,7 @@ export const galleryItems = [
     src: "/gallery/douche-vitree-bois.jpg",
     width: 900,
     height: 1156,
+    beforeSrc: null,
   },
   {
     id: "renovation-sdb-vasque-bois-miroir-led",
@@ -214,58 +240,30 @@ export const galleryItems = [
     src: "/gallery/vasque-bois-miroir-led.jpg",
     width: 900,
     height: 1171,
+    beforeSrc: null,
   },
 ];
 
 export const processSteps = [
   {
     step: "01",
-    title: "Vous contactez KS Multiservices",
-    description: "Un appel au 06 38 98 78 30, 24h/24 — on décroche, jour comme nuit.",
+    title: "Appel",
+    description: "Un numéro unique, 24h/24 — on décroche, jour comme nuit.",
   },
   {
     step: "02",
-    title: "Diagnostic de la situation",
+    title: "Diagnostic",
     description: "On qualifie l'urgence par téléphone pour envoyer le bon technicien, équipé.",
   },
   {
     step: "03",
-    title: "Intervention rapide",
-    description: "Déplacement sur Le Havre et son agglomération, en moins de 45 minutes.",
+    title: "Devis gratuit",
+    description: "Un tarif clair, confirmé avant toute intervention.",
   },
   {
     step: "04",
-    title: "Résolution du problème",
-    description: "Plomberie, serrurerie ou vitrerie : le geste technique juste, sans improviser.",
-  },
-  {
-    step: "05",
-    title: "Votre tranquillité retrouvée",
-    description: "Logement sécurisé et fonctionnel, sans rendez-vous à rallonge.",
-  },
-] as const;
-
-// Arguments réels, déduits uniquement des informations fournies (pas de chiffres inventés).
-export const differentiators = [
-  {
-    title: "Intervention en moins de 45 minutes",
-    description:
-      "Une urgence plomberie, serrurerie ou vitrerie ? Notre équipe se déplace rapidement sur Le Havre et son agglomération.",
-  },
-  {
-    title: "Disponible jour et nuit",
-    description:
-      "24h/24, 7j/7, jours fériés compris — une urgence n'attend pas les horaires de bureau.",
-  },
-  {
-    title: "Devis gratuit et tarifs transparents",
-    description:
-      "Un devis gratuit avant toute intervention, avec des tarifs de départ annoncés clairement, sans surprise.",
-  },
-  {
-    title: `${reviews.rating}/5 sur ${reviews.count} avis`,
-    description:
-      "Depuis 2022, plus de 1000 clients font confiance à KS Multiservices pour leurs urgences et leurs travaux.",
+    title: "Intervention",
+    description: "Sur place en moins de 45 minutes, sur Le Havre et son agglomération.",
   },
 ] as const;
 
@@ -358,8 +356,111 @@ export const faqItems: FaqItem[] = [
       "Les tarifs indiqués sont des prix de départ, hors fournitures spécifiques. Le montant final est confirmé sur place avant toute intervention, dans le cadre du devis gratuit.",
   },
   {
+    question: "Y a-t-il une majoration la nuit, le week-end ou les jours fériés ?",
+    answer: business.surchargePolicy,
+  },
+  {
+    question: "Quels moyens de paiement acceptez-vous ?",
+    answer: `Nous acceptons le paiement par ${paymentMethods.join(" et ")}.`,
+  },
+  {
     question: "Faites-vous aussi la rénovation de salle de bain ?",
     answer:
       "Oui. Au-delà du dépannage d'urgence, KS Multiservices conçoit et réalise des projets complets de rénovation de salle de bain : carrelage, douche à l'italienne, receveur, plomberie et finitions.",
+  },
+];
+
+export type PriorityCity = {
+  slug: string;
+  name: string;
+  postalCode: string;
+  character: string;
+  intro: string;
+};
+
+// Communes prioritaires avec un contenu réellement différencié (géographie et
+// caractère local réels et vérifiables), et non un simple copier-coller avec
+// le nom de la ville changé. Les autres communes couvertes restent listées
+// sans page dédiée sur /zone-intervention.
+export const priorityCities: PriorityCity[] = [
+  {
+    slug: "le-havre",
+    name: "Le Havre",
+    postalCode: "76600",
+    character: "ville portuaire reconstruite par Auguste Perret, classée au patrimoine mondial de l'UNESCO",
+    intro:
+      "Basée au Havre, notre équipe connaît aussi bien les immeubles Perret du centre reconstruit que les quartiers résidentiels de Sanvic, Aplemont ou Bléville. Que vous soyez en appartement ou en maison, l'intervention se fait sans délai de trajet : nous sommes déjà sur place.",
+  },
+  {
+    slug: "sainte-adresse",
+    name: "Sainte-Adresse",
+    postalCode: "76310",
+    character: "commune balnéaire nichée entre falaises et bord de mer, au nord du Havre",
+    intro:
+      "Sainte-Adresse et ses villas en front de mer ou accrochées à la côte présentent souvent des installations anciennes ou des accès particuliers (escaliers, jardins en pente). Notre équipe s'y déplace régulièrement pour des urgences de plomberie, serrurerie et vitrerie, avec le même délai d'intervention qu'au Havre.",
+  },
+  {
+    slug: "montivilliers",
+    name: "Montivilliers",
+    postalCode: "76290",
+    character: "ville historique bâtie autour de son abbaye, dans l'agglomération havraise",
+    intro:
+      "À Montivilliers, entre le centre ancien autour de l'abbaye et les lotissements plus récents, nous intervenons aussi bien sur des bâtis anciens que sur des constructions modernes — chaque configuration ayant ses propres contraintes de plomberie et de serrurerie.",
+  },
+  {
+    slug: "harfleur",
+    name: "Harfleur",
+    postalCode: "76700",
+    character: "ancien port historique, aujourd'hui commune résidentielle et industrielle de l'agglomération havraise",
+    intro:
+      "Harfleur mêle un centre ancien resserré et des zones pavillonnaires plus récentes en périphérie. Notre équipe s'adapte à ces deux types d'habitat pour vos urgences de plomberie, serrurerie et vitrerie, avec la même réactivité qu'au Havre voisin.",
+  },
+  {
+    slug: "gonfreville-lorcher",
+    name: "Gonfreville-l'Orcher",
+    postalCode: "76700",
+    character: "commune de la zone industrialo-portuaire du Havre",
+    intro:
+      "Gonfreville-l'Orcher regroupe à la fois des zones résidentielles et la proximité immédiate de la zone industrialo-portuaire havraise. Nous intervenons chez les particuliers de la commune pour toute urgence de plomberie, serrurerie ou vitrerie, avec le même engagement de délai.",
+  },
+  {
+    slug: "octeville-sur-mer",
+    name: "Octeville-sur-Mer",
+    postalCode: "76930",
+    character: "commune littorale au nord du Havre, à proximité de l'aéroport Le Havre-Octeville",
+    intro:
+      "Octeville-sur-Mer conserve un caractère résidentiel et semi-rural en bord de falaise, au nord de l'agglomération havraise. Nous nous y déplaçons pour toute urgence de plomberie, serrurerie ou vitrerie, avec le même délai d'intervention que sur Le Havre.",
+  },
+  {
+    slug: "fecamp",
+    name: "Fécamp",
+    postalCode: "76400",
+    character: "port de pêche historique de la Côte d'Albâtre, connu pour le Palais Bénédictine",
+    intro:
+      "Plus éloignée sur la Côte d'Albâtre, Fécamp reste dans notre zone d'intervention pour vos urgences de plomberie, serrurerie et vitrerie, ainsi que pour vos projets de rénovation de salle de bain.",
+  },
+  {
+    slug: "honfleur",
+    name: "Honfleur",
+    postalCode: "14600",
+    character: "port pittoresque de l'estuaire de la Seine, célèbre pour son Vieux Bassin",
+    intro:
+      "De l'autre côté de l'estuaire de la Seine, Honfleur et ses maisons à pans de bois autour du Vieux Bassin demandent parfois une attention particulière pour les interventions de vitrerie et de serrurerie sur bâti ancien. Notre équipe s'y déplace pour vos urgences.",
+  },
+  {
+    slug: "bolbec",
+    name: "Bolbec",
+    postalCode: "76210",
+    character: "ancienne ville industrielle du textile, dans le Pays de Caux",
+    intro:
+      "Bolbec, ancienne cité industrielle du Pays de Caux, associe un centre-ville dense à des quartiers pavillonnaires. Nous y intervenons pour toute urgence de plomberie, serrurerie ou vitrerie, avec un devis gratuit avant chaque intervention.",
+  },
+  {
+    slug: "yvetot",
+    name: "Yvetot",
+    postalCode: "76190",
+    character: "sous-préfecture du Pays de Caux, ville-carrefour connue pour son église Saint-Pierre",
+    intro:
+      "Yvetot, ville-carrefour du Pays de Caux, fait partie de notre zone d'intervention élargie. Nous nous y déplaçons pour vos urgences de plomberie, serrurerie et vitrerie, ainsi que pour vos projets de rénovation de salle de bain.",
   },
 ];

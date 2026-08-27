@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { serviceCategories } from "@/lib/content";
+import { serviceCategories, priorityCities } from "@/lib/content";
 
 const siteUrl = "https://ksmultiservices.fr";
 
@@ -20,5 +20,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.9,
   }));
 
-  return [...staticRoutes, ...serviceRoutes];
+  const cityRoutes: MetadataRoute.Sitemap = priorityCities.map((city) => ({
+    url: `${siteUrl}/zone-intervention/${city.slug}`,
+    lastModified,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return [...staticRoutes, ...serviceRoutes, ...cityRoutes];
 }

@@ -1,13 +1,9 @@
 "use client";
 
-import { useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
+import { useState } from "react";
 import { Drop, Key, SquaresFour } from "@phosphor-icons/react/dist/ssr";
-import { pricing, pricingNote, serviceCategories, business } from "@/lib/content";
-
-gsap.registerPlugin(ScrollTrigger);
+import Reveal from "@/components/Reveal";
+import { pricing, pricingNote, serviceCategories, business, paymentMethods } from "@/lib/content";
 
 const icons = {
   plomberie: Drop,
@@ -15,87 +11,103 @@ const icons = {
   vitrerie: SquaresFour,
 } as const;
 
-export default function Pricing() {
-  const scope = useRef<HTMLDivElement>(null);
+type Filter = "tout" | (typeof serviceCategories)[number]["slug"];
 
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.utils.toArray<HTMLElement>("[data-pricing-card]").forEach((card, i) => {
-          gsap.from(card, {
-            y: 24,
-            opacity: 0,
-            duration: 0.5,
-            ease: "power2.out",
-            delay: i * 0.06,
-            scrollTrigger: { trigger: card, start: "top 88%" },
-          });
-        });
-      });
-      return () => mm.revert();
-    },
-    { scope }
-  );
+export default function Pricing() {
+  const [filter, setFilter] = useState<Filter>("tout");
+  const visible = filter === "tout" ? pricing : pricing.filter((p) => p.categorySlug === filter);
 
   return (
-    <section id="tarifs" ref={scope} className="bg-paper-2 py-24 md:py-32">
+    <section id="tarifs" className="bg-[color:var(--color-ink)] py-20 md:py-28">
       <div className="container-page">
-        <div className="max-w-2xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[color:var(--color-accent-strong)]">
-            Tarifs
-          </p>
-          <h2 className="mt-4 font-display text-3xl font-semibold text-[color:var(--color-text-on-light)] sm:text-4xl">
-            Des prix annoncés avant l&apos;intervention
+        <Reveal className="max-w-2xl">
+          <p className="eyebrow">Grille tarifaire</p>
+          <h2 className="mt-3 font-display text-3xl font-extrabold uppercase leading-[0.95] text-[color:var(--color-text-on-dark)] sm:text-4xl">
+            Des prix annoncés
+            <br />
+            avant l&apos;intervention
           </h2>
-          <p className="mt-4 text-lg text-[color:var(--color-text-on-light-muted)]">
+          <p className="mt-4 text-[color:var(--color-steel)]">
             Devis gratuit, tarifs de départ transparents — pas de mauvaise surprise à
             la fin du chantier.
           </p>
+        </Reveal>
+
+        <div className="mt-8 flex flex-wrap gap-2" role="group" aria-label="Filtrer les tarifs par métier">
+          <button
+            type="button"
+            onClick={() => setFilter("tout")}
+            aria-pressed={filter === "tout"}
+            className={`border px-4 py-2 font-mono text-xs uppercase tracking-wide transition ${
+              filter === "tout"
+                ? "border-[color:var(--color-accent)] bg-[color:var(--color-accent)] text-[color:var(--color-ink)]"
+                : "border-[color:var(--color-steel-line)] text-[color:var(--color-steel)] hover:border-[color:var(--color-accent)]"
+            }`}
+          >
+            Tout
+          </button>
+          {serviceCategories.map((cat) => (
+            <button
+              key={cat.slug}
+              type="button"
+              onClick={() => setFilter(cat.slug)}
+              aria-pressed={filter === cat.slug}
+              className={`border px-4 py-2 font-mono text-xs uppercase tracking-wide transition ${
+                filter === cat.slug
+                  ? "border-[color:var(--color-accent)] bg-[color:var(--color-accent)] text-[color:var(--color-ink)]"
+                  : "border-[color:var(--color-steel-line)] text-[color:var(--color-steel)] hover:border-[color:var(--color-accent)]"
+              }`}
+            >
+              {cat.name}
+            </button>
+          ))}
         </div>
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-3">
-          {pricing.map((category) => {
+        <div className="mt-8 grid gap-5 lg:grid-cols-3">
+          {visible.map((category) => {
             const meta = serviceCategories.find((c) => c.slug === category.categorySlug);
             const Icon = icons[category.categorySlug as keyof typeof icons];
             return (
-              <div
-                key={category.categorySlug}
-                data-pricing-card
-                className="flex flex-col rounded-3xl border border-[color:var(--color-border-light)] bg-white p-7 shadow-[0_24px_60px_-40px_rgba(20,23,28,0.35)]"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-ink">
-                  <Icon size={24} weight="duotone" className="text-[color:var(--color-accent)]" aria-hidden="true" />
+              <Reveal key={category.categorySlug}>
+                <div className="flex h-full flex-col border border-[color:var(--color-steel-line)] bg-[color:var(--color-ink-2)]">
+                  <div className="flex items-center justify-between border-b border-[color:var(--color-steel-line)] px-6 py-5">
+                    <div className="flex items-center gap-3">
+                      <Icon size={20} weight="duotone" className="text-[color:var(--color-accent)]" aria-hidden="true" />
+                      <h3 className="font-display text-lg font-bold uppercase text-[color:var(--color-text-on-dark)]">
+                        {meta?.name}
+                      </h3>
+                    </div>
+                  </div>
+                  <ul className="flex flex-1 flex-col gap-1 px-6 py-4">
+                    {category.items.map((priceItem) => (
+                      <li
+                        key={priceItem.label}
+                        className="flex items-baseline justify-between gap-4 border-b border-dashed border-[color:var(--color-steel-line)] py-3 text-sm last:border-none"
+                      >
+                        <span className="text-[color:var(--color-paper-dim)]">{priceItem.label}</span>
+                        <span className="tabular-figures whitespace-nowrap font-mono font-bold text-[color:var(--color-accent-strong)]">
+                          {priceItem.price}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  <a
+                    href={`tel:${business.phoneHref}`}
+                    className="border-t border-[color:var(--color-steel-line)] px-6 py-4 font-mono text-xs font-bold uppercase tracking-wide text-[color:var(--color-text-on-dark)] transition hover:text-[color:var(--color-accent-strong)]"
+                  >
+                    Demander un devis gratuit →
+                  </a>
                 </div>
-                <h3 className="mt-5 font-display text-xl font-semibold text-[color:var(--color-text-on-light)]">
-                  {meta?.name ?? category.categorySlug}
-                </h3>
-
-                <ul className="mt-5 flex flex-col gap-3 border-t border-[color:var(--color-border-light)] pt-5 text-sm">
-                  {category.items.map((item) => (
-                    <li key={item.label} className="flex items-baseline justify-between gap-4">
-                      <span className="text-[color:var(--color-text-on-light-muted)]">{item.label}</span>
-                      <span className="whitespace-nowrap font-display font-semibold text-[color:var(--color-text-on-light)]">
-                        à partir de {item.price}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-
-                <a
-                  href={`tel:${business.phoneHref}`}
-                  className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-ink underline decoration-[color:var(--color-accent)] decoration-2 underline-offset-4"
-                >
-                  Demander un devis gratuit →
-                </a>
-              </div>
+              </Reveal>
             );
           })}
         </div>
 
-        <p className="mt-8 max-w-2xl text-sm text-[color:var(--color-text-on-light-muted)]">
-          {pricingNote}
-        </p>
+        <div className="mt-8 max-w-2xl space-y-2 font-mono text-xs text-[color:var(--color-steel)]">
+          <p>{"// "}{pricingNote}</p>
+          <p>{"// Prix TTC. Aucune majoration de nuit, week-end ou jour férié."}</p>
+          <p>{"// Paiement accepté : "}{paymentMethods.join(", ")}.</p>
+        </div>
       </div>
     </section>
   );
