@@ -7,13 +7,12 @@ import { List, PhoneCall, X } from "@phosphor-icons/react/dist/ssr";
 import { business, serviceCategories } from "@/lib/content";
 
 const navLinks = [
-  { href: "#services", label: "Services" },
-  { href: "#tarifs", label: "Tarifs" },
-  { href: "#intervention", label: "Intervention" },
-  { href: "#pourquoi-nous", label: "Pourquoi nous" },
+  { href: "/#services", label: "Services" },
+  { href: "/#tarifs", label: "Tarifs" },
+  { href: "/#realisations", label: "Réalisations" },
   { href: "/zone-intervention", label: "Zone d'intervention" },
-  { href: "#realisations", label: "Réalisations" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#faq", label: "FAQ" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 export default function Header() {
@@ -41,14 +40,14 @@ export default function Header() {
       }`}
     >
       <div className="container-page flex h-16 items-center justify-between md:h-20">
-        <a href="#accueil" className="flex items-center gap-2.5" aria-label="KS Multiservices — Accueil">
+        <Link href="/#accueil" className="flex items-center gap-2.5" aria-label="KS Multiservices — Accueil">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white">
             <Image src="/logo.jpg" alt="" width={40} height={40} className="h-full w-full object-cover" priority />
           </span>
           <span className="font-display text-xl font-semibold tracking-tight text-[color:var(--color-text-on-dark)] md:text-2xl">
             KS<span className="text-[color:var(--color-accent)]">.</span>Multiservices
           </span>
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-8 lg:flex" aria-label="Navigation principale">
           {navLinks.map((link) => (

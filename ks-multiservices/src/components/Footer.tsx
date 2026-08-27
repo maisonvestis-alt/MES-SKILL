@@ -31,7 +31,10 @@ export default function Footer() {
           <ul className="mt-4 flex flex-col gap-2 text-sm">
             {serviceCategories.map((cat) => (
               <li key={cat.slug}>
-                <Link href="/#services" className="transition hover:text-[color:var(--color-accent)]">
+                <Link
+                  href={`/services/${cat.slug}`}
+                  className="transition hover:text-[color:var(--color-accent)]"
+                >
                   {cat.name}
                 </Link>
               </li>
@@ -39,6 +42,11 @@ export default function Footer() {
             <li>
               <Link href="/#tarifs" className="transition hover:text-[color:var(--color-accent)]">
                 Tarifs
+              </Link>
+            </li>
+            <li>
+              <Link href="/#faq" className="transition hover:text-[color:var(--color-accent)]">
+                FAQ
               </Link>
             </li>
           </ul>

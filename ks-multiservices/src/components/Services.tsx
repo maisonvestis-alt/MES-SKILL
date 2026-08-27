@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -116,12 +117,20 @@ export default function Services() {
                   </div>
                 </ul>
 
-                <a
-                  href={`tel:${business.phoneHref}`}
-                  className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-ink underline decoration-[color:var(--color-accent)] decoration-2 underline-offset-4"
-                >
-                  Demander cette intervention →
-                </a>
+                <div className="mt-6 flex flex-col items-start gap-2">
+                  <a
+                    href={`tel:${business.phoneHref}`}
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-ink underline decoration-[color:var(--color-accent)] decoration-2 underline-offset-4"
+                  >
+                    Demander cette intervention →
+                  </a>
+                  <Link
+                    href={`/services/${category.slug}`}
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--color-accent-strong)]"
+                  >
+                    Voir la page {category.name.toLowerCase()} →
+                  </Link>
+                </div>
               </div>
             );
           })}

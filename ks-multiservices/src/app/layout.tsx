@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
-import { business, reviews, serviceAreaGroups } from "@/lib/content";
+import { business, reviews, serviceAreaGroups, serviceCategories } from "@/lib/content";
 
 const fraunces = Fraunces({
   variable: "--font-display",
@@ -86,11 +86,11 @@ const localBusinessJsonLd = {
     opens: "00:00",
     closes: "23:59",
   },
-  makesOffer: [
-    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Plomberie" } },
-    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Serrurerie" } },
-    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Vitrerie" } },
-  ],
+  makesOffer: serviceCategories.map((category) => ({
+    "@type": "Offer",
+    url: `${siteUrl}/services/${category.slug}`,
+    itemOffered: { "@type": "Service", name: category.name },
+  })),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

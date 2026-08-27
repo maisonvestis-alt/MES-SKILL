@@ -59,6 +59,7 @@ export type ServiceCategory = {
   name: string;
   shortLabel: string;
   description: string;
+  pageIntro: string;
   items: ServiceItem[];
 };
 
@@ -70,6 +71,8 @@ export const serviceCategories: ServiceCategory[] = [
     shortLabel: "Plomberie",
     description:
       "Fuites, canalisations bouchées, chauffe-eau en panne : une intervention rapide pour éviter que le problème ne s'aggrave.",
+    pageIntro:
+      "Une fuite qui s'aggrave, des toilettes bouchées, un chauffe-eau en panne : chaque minute compte. KS Multiservices intervient au Havre et dans son agglomération en moins de 45 minutes, 24h/24 et 7j/7, pour tous vos dépannages de plomberie — du simple débouchage aux travaux sanitaires complets et à la rénovation de salle de bain.",
     items: [
       { slug: "debouchage-wc", label: "Débouchage WC" },
       { slug: "debouchage-canalisation", label: "Débouchage canalisation" },
@@ -87,6 +90,8 @@ export const serviceCategories: ServiceCategory[] = [
     shortLabel: "Serrurerie",
     description:
       "Porte claquée, serrure forcée, sécurisation après effraction : une remise en sécurité rapide de votre logement.",
+    pageIntro:
+      "Porte claquée devant chez vous, serrure forcée après une tentative d'effraction, besoin de sécuriser votre logement : KS Multiservices intervient au Havre et dans son agglomération en moins de 45 minutes, 24h/24 et 7j/7, pour ouvrir, réparer ou sécuriser votre porte sans dégât inutile.",
     items: [
       { slug: "ouverture-de-porte-claquee", label: "Ouverture de porte claquée" },
       { slug: "ouverture-de-porte-blindee", label: "Ouverture de porte blindée" },
@@ -105,6 +110,8 @@ export const serviceCategories: ServiceCategory[] = [
     shortLabel: "Vitrerie",
     description:
       "Vitre cassée, double vitrage endommagé, fermeture d'urgence : une protection immédiate de votre habitation.",
+    pageIntro:
+      "Vitre cassée, double vitrage endommagé, bris de glace après une effraction : KS Multiservices intervient au Havre et dans son agglomération en moins de 45 minutes, 24h/24 et 7j/7, pour une mise en sécurité immédiate et un remplacement sur mesure de votre vitrage.",
     items: [
       { slug: "remplacement-de-vitre-cassee", label: "Remplacement de vitre cassée" },
       { slug: "double-vitrage", label: "Double vitrage" },
@@ -314,5 +321,45 @@ export const serviceAreaGroups: ServiceAreaGroup[] = [
   {
     title: "Vers Rouen",
     communes: ["Bourg-Achard", "Pont-de-l'Arche", "Elbeuf", "Rouen"],
+  },
+];
+
+export type FaqItem = {
+  question: string;
+  answer: string;
+};
+
+// Questions fréquentes, répondues uniquement à partir des informations déjà
+// établies ailleurs sur le site (disponibilité, devis, délai, zone, tarifs).
+export const faqItems: FaqItem[] = [
+  {
+    question: "Intervenez-vous vraiment 24h/24 et 7j/7 ?",
+    answer:
+      "Oui, KS Multiservices intervient 24h/24 et 7j/7, y compris les jours fériés, pour toute urgence de plomberie, serrurerie ou vitrerie.",
+  },
+  {
+    question: "Le devis est-il vraiment gratuit ?",
+    answer:
+      "Oui, le devis est gratuit et sans engagement. Le tarif est confirmé avant toute intervention, à partir des prix de départ indiqués sur cette page.",
+  },
+  {
+    question: "En combien de temps intervenez-vous ?",
+    answer:
+      "Nous nous engageons à intervenir en moins de 45 minutes sur Le Havre et son agglomération. Notre zone d'intervention s'étend aussi à la Côte d'Albâtre, l'estuaire de la Seine et jusqu'à Rouen.",
+  },
+  {
+    question: "Quelles zones couvrez-vous ?",
+    answer:
+      "Le Havre et son agglomération en priorité, ainsi que la Côte d'Albâtre, l'estuaire de la Seine et jusqu'à Rouen. Consultez la page Zone d'intervention pour la liste complète des communes.",
+  },
+  {
+    question: "Les tarifs affichés sont-ils fermes ?",
+    answer:
+      "Les tarifs indiqués sont des prix de départ, hors fournitures spécifiques. Le montant final est confirmé sur place avant toute intervention, dans le cadre du devis gratuit.",
+  },
+  {
+    question: "Faites-vous aussi la rénovation de salle de bain ?",
+    answer:
+      "Oui. Au-delà du dépannage d'urgence, KS Multiservices conçoit et réalise des projets complets de rénovation de salle de bain : carrelage, douche à l'italienne, receveur, plomberie et finitions.",
   },
 ];
