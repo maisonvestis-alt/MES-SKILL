@@ -61,6 +61,14 @@ plausible.
 | 5 | **Zone d'intervention** — quartiers et communes sont des lieux réels du Havre et de son agglomération, à confirmer comme périmètre réellement desservi. Ajouter ou retirer une entrée met à jour la section, le schéma et les données structurées. | `src/lib/content.ts` → `serviceArea` |
 | 6 | **Nom de domaine** — `siteUrl` sert de base aux URL canoniques, au sitemap et aux données structurées. | `src/lib/content.ts` → `siteUrl` |
 
+## Déploiement
+
+Le dépôt est lié au projet Vercel **ks-multiservices**, avec `ks-multiservices`
+comme répertoire racine (le dépôt contient d'autres dossiers). Chaque poussée
+sur une branche crée une prévisualisation dédiée ; la branche de production du
+projet détermine ce qui est publié sur l'URL principale — à basculer sur la
+branche retenue au moment de la mise en ligne.
+
 ## Direction artistique
 
 « Signal sur acier » : base encre/anthracite (métal, sécurité, sérieux),
