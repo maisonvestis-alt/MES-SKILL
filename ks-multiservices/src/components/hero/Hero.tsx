@@ -50,8 +50,7 @@ export default function Hero() {
   const initial = reduceMotion ? false : "hidden";
 
   return (
-    <main id="contenu-principal">
-      <section className="hero-night relative min-h-[100svh] w-full overflow-hidden">
+    <section id="accueil" className="hero-night relative min-h-[100svh] w-full overflow-hidden">
         <HeroBackground />
 
         {/* Cadre "viewport de dispatch" — quatre équerres à peine visibles. */}
@@ -113,12 +112,12 @@ export default function Hero() {
                 <span>Vitrerie</span>
               </motion.p>
 
-              <h1 className="font-condensed uppercase leading-[0.86] tracking-[-0.005em] text-bone [text-wrap:balance]">
+              <h1 className="font-condensed uppercase leading-[0.9] tracking-[0.01em] text-bone [text-wrap:balance]">
                 {headlineLines.map((line, index) => (
                   <span key={index} className="reveal-clip">
                     <motion.span
                       variants={clipLine}
-                      className="block text-[clamp(2.75rem,11vw,9.5rem)]"
+                      className="block text-[clamp(3rem,12vw,10.5rem)]"
                       style={line.accent ? { color: "var(--ember)" } : undefined}
                     >
                       {line.text}
@@ -199,8 +198,7 @@ export default function Hero() {
           <span className="font-mono-tech text-[0.6rem] uppercase tracking-[0.34em]">Défiler</span>
           <ArrowDown size={16} className="scroll-nudge" aria-hidden="true" />
         </motion.a>
-      </section>
-    </main>
+    </section>
   );
 }
 

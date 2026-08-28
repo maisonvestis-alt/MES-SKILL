@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Anton, Fraunces, Inter, Space_Mono } from "next/font/google";
+import { Bebas_Neue, Fraunces, Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { business } from "@/lib/content";
 
@@ -18,8 +18,9 @@ const inter = Inter({
   display: "swap",
 });
 
-// Display condensé "très grand" pour le hero refondu (direction nuit / urgence).
-const anton = Anton({
+// Display condensé "très grand" pour la refonte (direction nuit / urgence).
+// Bebas Neue : plus élancé et éditorial qu'un condensé lourd — luxe assumé.
+const bebas = Bebas_Neue({
   variable: "--font-condensed",
   subsets: ["latin"],
   weight: "400",
@@ -103,7 +104,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="fr"
-      className={`${fraunces.variable} ${inter.variable} ${anton.variable} ${spaceMono.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${inter.variable} ${bebas.variable} ${spaceMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-paper text-[color:var(--color-text-on-light)]">
         <a href="#contenu-principal" className="skip-link">
