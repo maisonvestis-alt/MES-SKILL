@@ -1,41 +1,13 @@
-"use client";
+import SmoothScroll from "@/components/hero/SmoothScroll";
+import Hero from "@/components/hero/Hero";
 
-import { useCallback, useState } from "react";
-import IntroSequence from "@/components/IntroSequence";
-import Header from "@/components/Header";
-import Hero from "@/components/Hero";
-import Services from "@/components/Services";
-import Process from "@/components/Process";
-import WhyUs from "@/components/WhyUs";
-import ServiceArea from "@/components/ServiceArea";
-import Gallery from "@/components/Gallery";
-import FinalCta from "@/components/FinalCta";
-import Footer from "@/components/Footer";
-import MobileCallButton from "@/components/MobileCallButton";
-
+// Refonte "Nuit d'intervention" — livraison 1 : le hero seul, à valider avant la suite.
+// Les sections suivantes (services, process, réalisations, contact…) viendront
+// se brancher sous le hero, dans la même direction sombre/orange.
 export default function Home() {
-  // introDone ne sert plus qu'à démonter l'overlay une fois sa transition finie —
-  // le contenu réel ci-dessous reste toujours visible dans le HTML, y compris sans
-  // JavaScript ou pendant le chargement : l'intro est un calque par-dessus, jamais
-  // une condition d'affichage du site.
-  const [introVisible, setIntroVisible] = useState(true);
-  const handleIntroDone = useCallback(() => setIntroVisible(false), []);
-
   return (
-    <>
-      {introVisible && <IntroSequence onDone={handleIntroDone} />}
-      <Header />
-      <main id="contenu-principal">
-        <Hero />
-        <Services />
-        <Process />
-        <WhyUs />
-        <ServiceArea />
-        <Gallery />
-        <FinalCta />
-      </main>
-      <Footer />
-      <MobileCallButton />
-    </>
+    <SmoothScroll>
+      <Hero />
+    </SmoothScroll>
   );
 }

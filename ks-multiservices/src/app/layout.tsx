@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Anton, Fraunces, Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { business } from "@/lib/content";
 
@@ -15,6 +15,22 @@ const inter = Inter({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+// Display condensé "très grand" pour le hero refondu (direction nuit / urgence).
+const anton = Anton({
+  variable: "--font-condensed",
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+});
+
+// Mono "console de dispatch" : statuts, coordonnées, heure locale.
+const spaceMono = Space_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["400", "700"],
   display: "swap",
 });
 
@@ -87,7 +103,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="fr"
-      className={`${fraunces.variable} ${inter.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${inter.variable} ${anton.variable} ${spaceMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-paper text-[color:var(--color-text-on-light)]">
         <a href="#contenu-principal" className="skip-link">
