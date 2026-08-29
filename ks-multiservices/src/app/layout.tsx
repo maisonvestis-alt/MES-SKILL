@@ -1,25 +1,20 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Fraunces, Inter, Space_Mono } from "next/font/google";
+import { Bebas_Neue, Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
-import { business } from "@/lib/content";
-
-const fraunces = Fraunces({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  style: ["normal", "italic"],
-  display: "swap",
-});
+import { siteUrl } from "@/lib/content";
+import { localBusinessJsonLd } from "@/lib/seo";
+import JsonLd from "@/components/JsonLd";
 
 const inter = Inter({
   variable: "--font-body",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
   display: "swap",
 });
 
 // Display condensé "très grand" pour la refonte (direction nuit / urgence).
 // Bebas Neue : plus élancé et éditorial qu'un condensé lourd — luxe assumé.
+// C'est la police du titre H1 (élément LCP) : préchargée par défaut par next/font.
 const bebas = Bebas_Neue({
   variable: "--font-condensed",
   subsets: ["latin"],
@@ -34,8 +29,6 @@ const spaceMono = Space_Mono({
   weight: ["400", "700"],
   display: "swap",
 });
-
-const siteUrl = "https://ksmultiservices.fr";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -52,6 +45,7 @@ export const metadata: Metadata = {
     "dépannage urgence Le Havre",
     "rénovation salle de bain Le Havre",
   ],
+  alternates: { canonical: "/" },
   openGraph: {
     title: "KS Multiservices — Plombier, Serrurier, Vitrier au Havre",
     description:
@@ -63,58 +57,18 @@ export const metadata: Metadata = {
   },
 };
 
-const localBusinessJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "HomeAndConstructionBusiness",
-  name: business.name,
-  telephone: business.phone,
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: business.address.line1,
-    postalCode: business.address.postalCode,
-    addressLocality: business.address.city,
-    addressCountry: "FR",
-  },
-  areaServed: {
-    "@type": "City",
-    name: "Le Havre",
-  },
-  openingHoursSpecification: {
-    "@type": "OpeningHoursSpecification",
-    dayOfWeek: [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday",
-    ],
-    opens: "00:00",
-    closes: "23:59",
-  },
-  makesOffer: [
-    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Plomberie" } },
-    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Serrurerie" } },
-    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Vitrerie" } },
-  ],
-};
-
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="fr"
-      className={`${fraunces.variable} ${inter.variable} ${bebas.variable} ${spaceMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${bebas.variable} ${spaceMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-paper text-[color:var(--color-text-on-light)]">
+      <body className="flex min-h-full flex-col bg-[color:var(--color-void)] text-[color:var(--color-bone)]">
         <a href="#contenu-principal" className="skip-link">
           Aller au contenu principal
         </a>
         {children}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
-        />
+        <JsonLd data={localBusinessJsonLd()} />
       </body>
     </html>
   );

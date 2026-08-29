@@ -2,11 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import { useReducedMotion } from "motion/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 /**
  * Fond du hero — "plein écran vidéo" étalonné nuit.
@@ -44,9 +39,20 @@ export default function HeroBackground() {
   }, [reduceMotion]);
 
   // Parallaxe GSAP ScrollTrigger : le média glisse plus lentement que le contenu.
-  useGSAP(
-    () => {
-      if (reduceMotion || !mediaRef.current || !rootRef.current) return;
+  // GSAP est importé en dynamique (hors bundle initial) et n'agit que sur du
+  // hors-écran non critique.
+  useEffect(() => {
+    if (reduceMotion || !mediaRef.current || !rootRef.current) return;
+    let mounted = true;
+    let kill = () => {};
+
+    (async () => {
+      const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+      ]);
+      if (!mounted || !mediaRef.current || !rootRef.current) return;
+      gsap.registerPlugin(ScrollTrigger);
       const trigger = ScrollTrigger.create({
         trigger: rootRef.current,
         start: "top top",
@@ -58,10 +64,14 @@ export default function HeroBackground() {
           { yPercent: 14, scale: 1.18, ease: "none" }
         ),
       });
-      return () => trigger.kill();
-    },
-    { scope: rootRef, dependencies: [reduceMotion] }
-  );
+      kill = () => trigger.kill();
+    })();
+
+    return () => {
+      mounted = false;
+      kill();
+    };
+  }, [reduceMotion]);
 
   // Braises ascendantes sur canvas — additif, léger, économe.
   useEffect(() => {
@@ -168,7 +178,7 @@ export default function HeroBackground() {
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="none"
         >
           <source src="/videos/hero.webm" type="video/webm" />
           <source src="/videos/hero.mp4" type="video/mp4" />

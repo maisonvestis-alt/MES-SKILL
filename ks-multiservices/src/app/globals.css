@@ -69,6 +69,21 @@
   --line-void: rgba(244, 241, 234, 0.1);
   --line-void-strong: rgba(244, 241, 234, 0.22);
 
+  /* Texte sur fond nuit — rôles sémantiques (plus de rgba dispersés). */
+  --color-text-muted: rgba(244, 241, 234, 0.72);
+  --color-text-faint: rgba(244, 241, 234, 0.6);
+
+  /* Échelle typographique fluide — un seul endroit, pas de clamp() éparpillés. */
+  --fs-hero: clamp(3rem, 12vw, 10.5rem);
+  --fs-display: clamp(2.75rem, 8vw, 7rem);
+  --fs-h2: clamp(2.5rem, 6.5vw, 6rem);
+  --fs-h3: clamp(1.5rem, 3.2vw, 2.25rem);
+  --fs-lead: clamp(1rem, 1.6vw, 1.125rem);
+  --lh-display: 0.9;
+
+  /* Rythme vertical des sections. */
+  --section-py: clamp(5.5rem, 11vw, 8rem);
+
   --ease-signature: cubic-bezier(0.22, 1, 0.36, 1);
 }
 

@@ -105,7 +105,7 @@ export default function Hero() {
                 variants={fadeUp}
                 className="mb-7 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono-tech text-[0.68rem] uppercase tracking-[0.32em] text-ash md:text-xs"
               >
-                <span className="text-ember">Plomberie</span>
+                <span>Plomberie</span>
                 <span aria-hidden="true">—</span>
                 <span>Serrurerie</span>
                 <span aria-hidden="true">—</span>
@@ -117,7 +117,7 @@ export default function Hero() {
                   <span key={index} className="reveal-clip">
                     <motion.span
                       variants={clipLine}
-                      className="block text-[clamp(3rem,12vw,10.5rem)]"
+                      className="block text-[length:var(--fs-hero)]"
                       style={line.accent ? { color: "var(--ember)" } : undefined}
                     >
                       {line.text}
@@ -128,7 +128,7 @@ export default function Hero() {
 
               <motion.p
                 variants={fadeUp}
-                className="mt-8 max-w-xl text-base leading-relaxed text-[color:rgba(244,241,234,0.72)] md:text-lg"
+                className="mt-8 max-w-xl text-[length:var(--fs-lead)] leading-relaxed text-[color:var(--color-text-muted)]"
               >
                 Dépannage d&apos;urgence au Havre — plomberie, serrurerie, vitrerie.
                 Un seul numéro, {business.availability.toLowerCase()} :

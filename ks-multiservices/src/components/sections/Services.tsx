@@ -6,7 +6,7 @@ import { RevealGroup, RevealItem } from "./Reveal";
 /** Les trois métiers, réunis sous un seul numéro. Chaque carte appelle. */
 export default function Services() {
   return (
-    <section id="services" className="relative border-t border-[var(--line-void)] py-24 md:py-32">
+    <section id="services" className="relative border-t border-[var(--line-void)] py-[var(--section-py)]">
       <div className="mx-auto max-w-[92rem] px-5 md:px-10">
         <SectionHeader
           eyebrow="Nos interventions"
@@ -14,7 +14,7 @@ export default function Services() {
             <>
               Trois métiers.
               <br />
-              <span className="text-ember">Un seul numéro.</span>
+              Un seul numéro.
             </>
           }
           intro="Plomberie, serrurerie, vitrerie : un seul interlocuteur pour toutes vos urgences, sans chercher un artisan différent à chaque panne."
@@ -41,7 +41,7 @@ export default function Services() {
                 <h3 className="mt-8 font-condensed text-4xl uppercase leading-none tracking-[0.01em] text-bone md:text-5xl">
                   {category.name}
                 </h3>
-                <p className="mt-4 text-sm leading-relaxed text-[color:rgba(244,241,234,0.66)]">
+                <p className="mt-4 text-sm leading-relaxed text-[color:var(--color-text-muted)]">
                   {category.description}
                 </p>
 
@@ -49,9 +49,9 @@ export default function Services() {
                   {category.items.map((item) => (
                     <li
                       key={item.slug}
-                      className="flex items-center gap-3 font-mono-tech text-[0.72rem] uppercase tracking-[0.08em] text-[color:rgba(244,241,234,0.78)]"
+                      className="flex items-center gap-3 font-mono-tech text-[0.72rem] uppercase tracking-[0.08em] text-[color:var(--color-text-muted)]"
                     >
-                      <span className="h-1 w-1 rounded-full bg-ember" aria-hidden="true" />
+                      <span className="h-1 w-1 rounded-full bg-ash" aria-hidden="true" />
                       {item.label}
                     </li>
                   ))}

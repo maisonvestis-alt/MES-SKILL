@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Link from "next/link";
 import { PhoneCall } from "@phosphor-icons/react/dist/ssr";
 import { business, serviceCategories } from "@/lib/content";
 import { Reveal } from "./Reveal";
@@ -8,14 +9,14 @@ import Magnetic from "@/components/hero/Magnetic";
 
 type Status = "idle" | "sending" | "ok" | "error";
 
-const serviceOptions = [
+const urgencyOptions = [
   ...serviceCategories.map((category) => category.name),
   "Rénovation salle de bain",
   "Autre demande",
 ];
 
 const fieldClass =
-  "w-full rounded-lg border border-[var(--line-void)] bg-[color:rgba(10,10,10,0.6)] px-4 py-3 text-sm text-bone placeholder:text-ash outline-none transition-colors duration-300 focus:border-[color:var(--color-ember)]";
+  "min-h-[44px] w-full rounded-lg border border-[var(--line-void)] bg-[color:rgba(10,10,10,0.6)] px-4 py-3 text-sm text-bone placeholder:text-ash outline-none transition-colors duration-300 focus:border-[color:var(--color-ember)]";
 const labelClass = "mb-2 block font-mono-tech text-[0.6rem] uppercase tracking-[0.22em] text-ash";
 
 export default function Contact() {
@@ -26,11 +27,12 @@ export default function Contact() {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
+    // L'API attend { name, phone, service, message } : l'adresse alimente `message`.
     const payload = {
       name: String(data.get("name") ?? "").trim(),
       phone: String(data.get("phone") ?? "").trim(),
       service: String(data.get("service") ?? ""),
-      message: String(data.get("message") ?? "").trim(),
+      message: String(data.get("address") ?? "").trim(),
     };
 
     setStatus("sending");
@@ -54,9 +56,9 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="relative border-t border-[var(--line-void)] py-24 md:py-32">
+    <section id="contact" className="relative border-t border-[var(--line-void)] py-[var(--section-py)]">
       <div className="mx-auto grid max-w-[92rem] grid-cols-1 gap-12 px-5 md:px-10 lg:grid-cols-2 lg:gap-20">
-        {/* Colonne appel direct */}
+        {/* Colonne appel direct — chemin principal */}
         <div>
           <Reveal>
             <p className="flex items-center gap-2.5 font-mono-tech text-[0.62rem] uppercase tracking-[0.3em] text-ash md:text-xs">
@@ -65,23 +67,23 @@ export default function Contact() {
             </p>
           </Reveal>
           <Reveal delay={0.05}>
-            <h2 className="mt-6 font-condensed text-[clamp(2.75rem,8vw,7rem)] uppercase leading-[0.86] tracking-[0.01em] text-bone">
+            <h2 className="mt-6 font-condensed text-[length:var(--fs-display)] uppercase leading-[0.86] tracking-[0.01em] text-bone">
               Une urgence ?
               <br />
               <span className="text-ember">Appelez.</span>
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
-            <p className="mt-8 max-w-md text-base leading-relaxed text-[color:rgba(244,241,234,0.72)]">
+            <p className="mt-8 max-w-md text-[length:var(--fs-lead)] leading-relaxed text-[color:var(--color-text-muted)]">
               Le plus rapide, c&apos;est le téléphone : on décroche jour et nuit. Le
-              formulaire est là pour les demandes de devis moins pressées.
+              formulaire est là pour les demandes moins pressées.
             </p>
           </Reveal>
           <Reveal delay={0.15}>
             <Magnetic strength={0.35} className="mt-8 inline-block">
               <a
                 href={`tel:${business.phoneHref}`}
-                className="inline-flex items-center gap-3 rounded-full bg-ember px-7 py-4 text-base font-semibold text-void shadow-[0_20px_50px_-18px_rgba(255,90,31,0.7)] transition-[background-color] duration-500 ease-[var(--ease-signature)] hover:bg-ember-glow"
+                className="inline-flex min-h-[44px] items-center gap-3 rounded-full bg-ember px-7 py-4 text-base font-semibold text-void shadow-[0_20px_50px_-18px_rgba(255,90,31,0.7)] transition-[background-color] duration-500 ease-[var(--ease-signature)] hover:bg-ember-glow"
               >
                 <PhoneCall size={19} weight="fill" aria-hidden="true" />
                 {business.phone}
@@ -95,12 +97,11 @@ export default function Contact() {
           </Reveal>
         </div>
 
-        {/* Colonne formulaire */}
+        {/* Colonne formulaire — chemin secondaire, court */}
         <Reveal delay={0.1}>
           <form
             onSubmit={handleSubmit}
             className="rounded-2xl border border-[var(--line-void)] bg-[color:rgba(14,14,15,0.5)] p-6 md:p-8"
-            noValidate
           >
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
               <div>
@@ -119,10 +120,10 @@ export default function Contact() {
 
             <div className="mt-5">
               <label htmlFor="service" className={labelClass}>
-                Besoin
+                Type d&apos;urgence
               </label>
-              <select id="service" name="service" defaultValue={serviceOptions[0]} className={fieldClass}>
-                {serviceOptions.map((option) => (
+              <select id="service" name="service" defaultValue={urgencyOptions[0]} className={fieldClass}>
+                {urgencyOptions.map((option) => (
                   <option key={option} value={option} className="bg-void text-bone">
                     {option}
                   </option>
@@ -131,23 +132,41 @@ export default function Contact() {
             </div>
 
             <div className="mt-5">
-              <label htmlFor="message" className={labelClass}>
-                Votre demande
+              <label htmlFor="address" className={labelClass}>
+                Adresse d&apos;intervention
               </label>
-              <textarea
-                id="message"
-                name="message"
-                rows={4}
+              <input
+                id="address"
+                name="address"
+                type="text"
                 required
-                placeholder="Décrivez brièvement la situation…"
-                className={`${fieldClass} resize-none`}
+                autoComplete="street-address"
+                placeholder="N°, rue, commune"
+                className={fieldClass}
               />
             </div>
+
+            <label className="mt-6 flex items-start gap-3 text-xs leading-relaxed text-[color:var(--color-text-faint)]">
+              <input
+                type="checkbox"
+                name="consent"
+                required
+                className="mt-0.5 h-4 w-4 shrink-0 accent-[color:var(--color-ember)]"
+              />
+              <span>
+                J&apos;accepte que ces informations soient utilisées pour être recontacté
+                au sujet de ma demande.{" "}
+                <Link href="/politique-confidentialite" className="text-bone underline underline-offset-2 hover:text-ember">
+                  Politique de confidentialité
+                </Link>
+                .
+              </span>
+            </label>
 
             <button
               type="submit"
               disabled={status === "sending"}
-              className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full border border-[var(--line-void-strong)] px-7 py-4 text-sm font-semibold text-bone transition-colors duration-500 ease-[var(--ease-signature)] hover:border-ember hover:text-ember disabled:cursor-not-allowed disabled:opacity-60"
+              className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-full border border-[var(--line-void-strong)] px-7 py-4 text-sm font-semibold text-bone transition-colors duration-500 ease-[var(--ease-signature)] hover:border-ember hover:text-ember disabled:cursor-not-allowed disabled:opacity-60"
             >
               {status === "sending" ? "Envoi…" : "Envoyer ma demande"}
             </button>

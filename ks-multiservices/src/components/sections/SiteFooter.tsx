@@ -13,7 +13,7 @@ const nav = [
 export default function SiteFooter() {
   const year = new Date().getFullYear();
   return (
-    <footer className="hero-night border-t border-[var(--line-void)] py-16 md:py-20">
+    <footer className="hero-night border-t border-[var(--line-void)] pt-16 pb-32 md:py-20">
       <div className="mx-auto max-w-[92rem] px-5 md:px-10">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-12">
           <div className="md:col-span-5">

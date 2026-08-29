@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { galleryItems, renovationService } from "@/lib/content";
 import SectionHeader from "./SectionHeader";
 import { RevealGroup, RevealItem } from "./Reveal";
@@ -10,7 +11,7 @@ import { RevealGroup, RevealItem } from "./Reveal";
  */
 export default function Realisations() {
   return (
-    <section id="realisations" className="relative border-t border-[var(--line-void)] py-24 md:py-32">
+    <section id="realisations" className="relative border-t border-[var(--line-void)] py-[var(--section-py)]">
       <div className="mx-auto max-w-[92rem] px-5 md:px-10">
         <SectionHeader
           eyebrow="Réalisations"
@@ -18,7 +19,7 @@ export default function Realisations() {
             <>
               Au-delà de l&apos;urgence,
               <br />
-              <span className="text-ember">le chantier.</span>
+              le chantier.
             </>
           }
           intro={renovationService.description}
@@ -33,12 +34,12 @@ export default function Realisations() {
               <figure className="group h-full overflow-hidden rounded-xl border border-[var(--line-void)] bg-[color:var(--color-void-2)] transition-transform duration-500 ease-[var(--ease-signature)] hover:scale-[1.02]">
                 <div className="relative aspect-[4/5] overflow-hidden">
                   {item.src ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                    <Image
                       src={item.src}
                       alt={item.caption}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-700 ease-[var(--ease-signature)] group-hover:scale-105"
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-700 ease-[var(--ease-signature)] group-hover:scale-105"
                     />
                   ) : (
                     <div
@@ -65,7 +66,7 @@ export default function Realisations() {
                   <h3 className="font-condensed text-xl uppercase leading-tight tracking-[0.02em] text-bone">
                     {item.caption}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[color:rgba(244,241,234,0.62)]">
+                  <p className="mt-2 text-sm leading-relaxed text-[color:var(--color-text-faint)]">
                     {item.detail}
                   </p>
                 </figcaption>

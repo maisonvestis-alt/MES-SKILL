@@ -6,7 +6,7 @@ import Magnetic from "@/components/hero/Magnetic";
 /** Ancrage local : Le Havre et son agglomération. */
 export default function ServiceArea() {
   return (
-    <section id="zone" className="relative border-t border-[var(--line-void)] py-24 md:py-32">
+    <section id="zone" className="relative border-t border-[var(--line-void)] py-[var(--section-py)]">
       <div className="mx-auto grid max-w-[92rem] grid-cols-1 items-end gap-12 px-5 md:px-10 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-7">
           <Reveal>
@@ -16,15 +16,15 @@ export default function ServiceArea() {
             </p>
           </Reveal>
           <Reveal delay={0.05}>
-            <h2 className="mt-6 font-condensed text-[clamp(3rem,9vw,8rem)] uppercase leading-[0.86] tracking-[0.01em] text-bone">
+            <h2 className="mt-6 font-condensed text-[length:var(--fs-display)] uppercase leading-[0.86] tracking-[0.01em] text-bone">
               Le Havre
               <br />
-              <span className="text-ember">et son agglomération.</span>
+              et son agglomération.
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono-tech text-[0.7rem] uppercase tracking-[0.18em] text-ash">
-              <MapPin size={15} className="text-ember" aria-hidden="true" />
+              <MapPin size={15} className="text-ash" aria-hidden="true" />
               49.4938° N — 0.1077° E
               <span aria-hidden="true">·</span>
               {business.address.postalCode}
@@ -35,7 +35,7 @@ export default function ServiceArea() {
         <div className="lg:col-span-5">
           <Reveal delay={0.1}>
             <div className="rounded-xl border border-[var(--line-void)] bg-[color:rgba(14,14,15,0.5)] p-7">
-              <p className="text-base leading-relaxed text-[color:rgba(244,241,234,0.78)]">
+              <p className="text-base leading-relaxed text-[color:var(--color-text-muted)]">
                 {business.serviceArea.note}.
               </p>
               <p className="mt-4 text-sm leading-relaxed text-ash">{business.availability}.</p>
