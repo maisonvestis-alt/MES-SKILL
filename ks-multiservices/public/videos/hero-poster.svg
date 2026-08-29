@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Nuit d'intervention — ambiance dépannage urgence">
+  <defs>
+    <radialGradient id="ember" cx="26%" cy="82%" r="75%">
+      <stop offset="0%" stop-color="#ff7a3c" stop-opacity="0.85"/>
+      <stop offset="22%" stop-color="#ff5a1f" stop-opacity="0.45"/>
+      <stop offset="52%" stop-color="#c53c11" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#0a0a0a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="cool" cx="86%" cy="12%" r="60%">
+      <stop offset="0%" stop-color="#2b3340" stop-opacity="0.5"/>
+      <stop offset="60%" stop-color="#12151a" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#0a0a0a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="floor" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.85"/>
+      <stop offset="40%" stop-color="#0a0a0a" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0a0a0a" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="vig" cx="50%" cy="46%" r="72%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="72%" stop-color="#000000" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.9"/>
+    </radialGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.06"/></feComponentTransfer>
+    </filter>
+    <filter id="soft"><feGaussianBlur stdDeviation="42"/></filter>
+  </defs>
+
+  <!-- Nuit -->
+  <rect width="1920" height="1080" fill="#0a0a0a"/>
+  <rect width="1920" height="1080" fill="url(#cool)"/>
+
+  <!-- Halo torche de secours -->
+  <rect width="1920" height="1080" fill="url(#ember)"/>
+
+  <!-- Traînées de lumière verticales (rue mouillée / seuil éclairé) -->
+  <g opacity="0.5" filter="url(#soft)">
+    <rect x="360" y="120" width="10" height="900" fill="#ff7a3c" opacity="0.30"/>
+    <rect x="520" y="80" width="6" height="960" fill="#f4f1ea" opacity="0.10"/>
+    <rect x="248" y="220" width="14" height="820" fill="#ff5a1f" opacity="0.22"/>
+    <rect x="700" y="180" width="4" height="880" fill="#ff7a3c" opacity="0.12"/>
+  </g>
+
+  <!-- Reflets au sol -->
+  <rect x="0" y="720" width="1920" height="360" fill="url(#floor)"/>
+
+  <!-- Vignette + grain -->
+  <rect width="1920" height="1080" fill="url(#vig)"/>
+  <rect width="1920" height="1080" filter="url(#grain)" opacity="0.55"/>
+</svg>

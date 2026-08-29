@@ -1,41 +1,48 @@
-"use client";
-
-import { useCallback, useState } from "react";
-import IntroSequence from "@/components/IntroSequence";
-import Header from "@/components/Header";
-import Hero from "@/components/Hero";
-import Services from "@/components/Services";
-import Process from "@/components/Process";
-import WhyUs from "@/components/WhyUs";
-import ServiceArea from "@/components/ServiceArea";
-import Gallery from "@/components/Gallery";
-import FinalCta from "@/components/FinalCta";
-import Footer from "@/components/Footer";
+import type { Metadata } from "next";
+import SmoothScroll from "@/components/hero/SmoothScroll";
+import SiteHeader from "@/components/sections/SiteHeader";
+import Hero from "@/components/hero/Hero";
+import Services from "@/components/sections/Services";
+import Process from "@/components/sections/Process";
+import WhyUs from "@/components/sections/WhyUs";
+import Pricing from "@/components/sections/Pricing";
+import ServiceArea from "@/components/sections/ServiceArea";
+import Realisations from "@/components/sections/Realisations";
+import Faq from "@/components/sections/Faq";
+import Contact from "@/components/sections/Contact";
+import SiteFooter from "@/components/sections/SiteFooter";
 import MobileCallButton from "@/components/MobileCallButton";
+import JsonLd from "@/components/JsonLd";
+import { faqJsonLd, servicesJsonLd } from "@/lib/seo";
 
+export const metadata: Metadata = {
+  title: "Dépannage urgence plomberie, serrurerie, vitrerie au Havre — 24h/24",
+  description:
+    "KS Multiservices : dépannage d'urgence plomberie, serrurerie et vitrerie au Havre et son agglomération, 24h/24 et 7j/7. Un seul numéro, devis avant intervention.",
+  alternates: { canonical: "/" },
+};
+
+// Refonte "Nuit d'intervention" — landing dépannage urgence, direction sombre/orange.
 export default function Home() {
-  // introDone ne sert plus qu'à démonter l'overlay une fois sa transition finie —
-  // le contenu réel ci-dessous reste toujours visible dans le HTML, y compris sans
-  // JavaScript ou pendant le chargement : l'intro est un calque par-dessus, jamais
-  // une condition d'affichage du site.
-  const [introVisible, setIntroVisible] = useState(true);
-  const handleIntroDone = useCallback(() => setIntroVisible(false), []);
-
   return (
-    <>
-      {introVisible && <IntroSequence onDone={handleIntroDone} />}
-      <Header />
-      <main id="contenu-principal">
-        <Hero />
-        <Services />
-        <Process />
-        <WhyUs />
-        <ServiceArea />
-        <Gallery />
-        <FinalCta />
-      </main>
-      <Footer />
-      <MobileCallButton />
-    </>
+    <SmoothScroll>
+      <div className="hero-night">
+        <SiteHeader />
+        <main id="contenu-principal">
+          <Hero />
+          <Services />
+          <Process />
+          <WhyUs />
+          <Pricing />
+          <ServiceArea />
+          <Realisations />
+          <Faq />
+          <Contact />
+        </main>
+        <SiteFooter />
+        <MobileCallButton />
+      </div>
+      <JsonLd data={[...servicesJsonLd(), faqJsonLd()]} />
+    </SmoothScroll>
   );
 }

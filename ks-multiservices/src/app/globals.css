@@ -49,6 +49,42 @@
 
   --background: var(--color-paper);
   --foreground: var(--color-text-on-light);
+
+  /*
+    Direction "Nuit d'intervention" — landing dépannage urgence (refonte hero).
+    Base quasi-noire cinématographique, accent orange "signal" (torche de secours,
+    chaleur de l'intervention), texte os chaud plutôt que blanc pur pour le luxe.
+    Le mono sert d'affichage "console de dispatch" : la page se présente comme un
+    poste d'astreinte qui répond, de jour comme de nuit.
+  */
+  --void: #0a0a0a;
+  --void-2: #0e0e0f;
+  --void-3: #141416;
+  --ember: #ff5a1f;
+  --ember-glow: #ff7a3c;
+  --ember-deep: #c53c11;
+  --bone: #f4f1ea;
+  --ash: #8f8a83;
+  --ash-dim: #625d57;
+  --line-void: rgba(244, 241, 234, 0.1);
+  --line-void-strong: rgba(244, 241, 234, 0.22);
+
+  /* Texte sur fond nuit — rôles sémantiques (plus de rgba dispersés). */
+  --color-text-muted: rgba(244, 241, 234, 0.72);
+  --color-text-faint: rgba(244, 241, 234, 0.6);
+
+  /* Échelle typographique fluide — un seul endroit, pas de clamp() éparpillés. */
+  --fs-hero: clamp(3rem, 12vw, 10.5rem);
+  --fs-display: clamp(2.75rem, 8vw, 7rem);
+  --fs-h2: clamp(2.5rem, 6.5vw, 6rem);
+  --fs-h3: clamp(1.5rem, 3.2vw, 2.25rem);
+  --fs-lead: clamp(1rem, 1.6vw, 1.125rem);
+  --lh-display: 0.9;
+
+  /* Rythme vertical des sections. */
+  --section-py: clamp(5.5rem, 11vw, 8rem);
+
+  --ease-signature: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @theme inline {
@@ -62,6 +98,13 @@
   --color-steel: var(--color-steel);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-void: var(--void);
+  --color-void-2: var(--void-2);
+  --color-void-3: var(--void-3);
+  --color-ember: var(--ember);
+  --color-ember-glow: var(--ember-glow);
+  --color-bone: var(--bone);
+  --color-ash: var(--ash);
   --font-display: var(--font-display);
   --font-body: var(--font-body);
 }
@@ -141,4 +184,119 @@ button {
 
 .skip-link:focus {
   top: 1rem;
+}
+
+/* ==========================================================================
+   Hero "Nuit d'intervention" — refonte dépannage urgence
+   ========================================================================== */
+
+/* Lenis smooth scroll (recommandations officielles) ----------------------- */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Section hero : fond nuit, texte os, typo condensée ---------------------- */
+.hero-night {
+  background-color: var(--void);
+  color: var(--bone);
+  font-family: var(--font-body);
+}
+
+.font-condensed {
+  font-family: var(--font-condensed), "Arial Narrow", "Helvetica Neue", sans-serif;
+}
+.font-mono-tech {
+  font-family: var(--font-mono), ui-monospace, "SFMono-Regular", monospace;
+}
+
+/* Reveal masqué ligne par ligne ------------------------------------------ */
+.reveal-clip {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em; /* laisse respirer les jambages des lettres */
+}
+
+/* Grain cinématographique (posé sur la vidéo comme un étalonnage) --------- */
+.hero-grain {
+  position: absolute;
+  inset: -50%;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: hero-grain-shift 0.6s steps(2) infinite;
+}
+@keyframes hero-grain-shift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(-2%, 1%, 0);
+  }
+  100% {
+    transform: translate3d(1%, -1.5%, 0);
+  }
+}
+
+/* Halo "torche de secours" qui respire lentement -------------------------- */
+@keyframes ember-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translate3d(2%, -1.5%, 0) scale(1.06);
+  }
+}
+.ember-breathe {
+  animation: ember-breathe 9s var(--ease-signature) infinite;
+}
+
+/* Pastille de statut "en ligne" ------------------------------------------ */
+@keyframes signal-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 90, 31, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 7px rgba(255, 90, 31, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 90, 31, 0);
+  }
+}
+.signal-dot {
+  animation: signal-pulse 2.4s var(--ease-signature) infinite;
+}
+
+/* Indice de défilement ---------------------------------------------------- */
+@keyframes scroll-nudge {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 1;
+  }
+}
+.scroll-nudge {
+  animation: scroll-nudge 2s var(--ease-signature) infinite;
+}
+
+/* Sur le hero nuit, le focus laiton devient orange signal ----------------- */
+.hero-night :focus-visible {
+  outline-color: var(--ember);
 }
