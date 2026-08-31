@@ -1,0 +1,1293 @@
+<title>Refonte KS Multiservices</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+  /* ---- Constantes de marque (identiques dans les deux thèmes) ---- */
+  :root{
+    --carbon:#0B0A09;
+    --carbon-2:#17130F;
+    --signal:#FF5B04;
+    --amber:#F5A524;
+    --ember:#C1440E;
+    --on-carbon:#F2EDE7;
+    --on-carbon-muted:#A79C91;
+    --on-carbon-rule:rgba(242,237,231,.14);
+
+    --font-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+    --font-body:"IBM Plex Sans","Segoe UI",Helvetica,Arial,sans-serif;
+    --font-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+
+    --measure:66ch;
+    --radius:2px;
+  }
+
+  /* ---- Thème clair (par défaut) ---- */
+  :root{
+    --bg:#FAF8F5;
+    --bg-2:#F2EEE8;
+    --surface:#FFFFFF;
+    --text:#17130F;
+    --text-muted:#6B6259;
+    --text-soft:#8C8177;
+    --rule:rgba(23,19,15,.13);
+    --rule-strong:rgba(23,19,15,.28);
+    --accent-ink:#C1440E;
+    --chip-bg:rgba(255,91,4,.10);
+    --chip-ink:#A4390B;
+    --mark:#17130F;
+    --shadow:0 1px 2px rgba(23,19,15,.05),0 8px 24px rgba(23,19,15,.05);
+  }
+
+  /* ---- Thème sombre : OS sombre, sauf choix explicite « clair » ---- */
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0B0A09;
+      --bg-2:#121010;
+      --surface:#17130F;
+      --text:#F2EDE7;
+      --text-muted:#A79C91;
+      --text-soft:#7C736A;
+      --rule:rgba(242,237,231,.14);
+      --rule-strong:rgba(242,237,231,.3);
+      --accent-ink:#FF7A2E;
+      --chip-bg:rgba(255,91,4,.15);
+      --chip-ink:#FFA062;
+      --mark:#F5A524;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.35);
+    }
+  }
+  /* ---- Thème sombre : choix explicite ---- */
+  :root[data-theme="dark"]{
+    --bg:#0B0A09;
+    --bg-2:#121010;
+    --surface:#17130F;
+    --text:#F2EDE7;
+    --text-muted:#A79C91;
+    --text-soft:#7C736A;
+    --rule:rgba(242,237,231,.14);
+    --rule-strong:rgba(242,237,231,.3);
+    --accent-ink:#FF7A2E;
+    --chip-bg:rgba(255,91,4,.15);
+    --chip-ink:#FFA062;
+    --mark:#F5A524;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    font-size:16.5px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  a{color:var(--accent-ink);text-underline-offset:3px;text-decoration-thickness:1px;}
+  a:hover{text-decoration-thickness:2px;}
+  :focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:var(--radius);}
+
+  /* ================= MASTHEAD ================= */
+  .masthead{
+    background:var(--carbon);
+    color:var(--on-carbon);
+    position:relative;
+    overflow:hidden;
+    border-bottom:3px solid var(--signal);
+  }
+  .masthead::after{
+    content:"";
+    position:absolute;
+    top:0;left:-40%;
+    width:40%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(255,91,4,.22),transparent);
+    animation:sweep 9s cubic-bezier(.6,0,.4,1) infinite;
+    pointer-events:none;
+  }
+  @keyframes sweep{
+    0%{transform:translateX(0);}
+    55%,100%{transform:translateX(350%);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .masthead::after{animation:none;opacity:.35;transform:translateX(160%);}
+  }
+  .masthead-inner{
+    position:relative;z-index:1;
+    max-width:1240px;margin:0 auto;
+    padding:clamp(2.5rem,6vw,4.5rem) clamp(1.25rem,4vw,3rem) clamp(2rem,4vw,3rem);
+    display:flex;flex-direction:column;gap:1.75rem;
+  }
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:.72rem;font-weight:500;
+    letter-spacing:.22em;text-transform:uppercase;
+    color:var(--signal);
+    display:flex;flex-wrap:wrap;gap:.65rem 1.1rem;align-items:center;
+  }
+  .eyebrow span:not(:first-child){color:var(--on-carbon-muted);}
+  h1{
+    font-family:var(--font-display);
+    font-variation-settings:"wdth" 118;
+    font-weight:800;
+    font-size:clamp(2.35rem,7vw,4.6rem);
+    line-height:.96;
+    letter-spacing:-.02em;
+    text-transform:uppercase;
+    text-wrap:balance;
+    margin:0;
+    color:var(--on-carbon);
+  }
+  h1 em{font-style:normal;color:var(--signal);}
+  .standfirst{
+    max-width:60ch;
+    font-size:clamp(1rem,1.6vw,1.15rem);
+    color:var(--on-carbon-muted);
+    margin:0;
+  }
+  .masthead-meta{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:1px;
+    background:var(--on-carbon-rule);
+    border:1px solid var(--on-carbon-rule);
+    margin-top:.5rem;
+  }
+  .masthead-meta div{background:var(--carbon);padding:.85rem 1rem;}
+  .masthead-meta dt{
+    font-family:var(--font-mono);font-size:.66rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--on-carbon-muted);margin:0 0 .3rem;
+  }
+  .masthead-meta dd{
+    margin:0;font-family:var(--font-display);font-variation-settings:"wdth" 105;
+    font-weight:700;font-size:1.02rem;color:var(--on-carbon);
+    font-variant-numeric:tabular-nums;
+  }
+
+  /* ================= SHELL ================= */
+  .shell{
+    max-width:1240px;margin:0 auto;
+    padding:0 clamp(1.25rem,4vw,3rem) 6rem;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:0;
+  }
+  @media (min-width:1080px){
+    .shell{grid-template-columns:210px minmax(0,1fr);gap:clamp(2.5rem,5vw,5rem);}
+  }
+
+  /* ---- Sommaire ---- */
+  .toc{display:none;}
+  @media (min-width:1080px){
+    .toc{
+      display:block;
+      position:sticky;top:0;align-self:start;
+      padding-top:3.5rem;max-height:100vh;overflow-y:auto;
+    }
+  }
+  .toc h2{
+    font-family:var(--font-mono);font-size:.68rem;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--text-soft);margin:0 0 1rem;font-weight:500;
+  }
+  .toc ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.1rem;}
+  .toc a{
+    display:grid;grid-template-columns:2.1rem 1fr;gap:.15rem;
+    padding:.42rem .5rem .42rem 0;
+    font-size:.85rem;line-height:1.32;
+    color:var(--text-muted);text-decoration:none;
+    border-left:2px solid transparent;padding-left:.7rem;
+    transition:color .18s,border-color .18s;
+  }
+  .toc a span{font-family:var(--font-mono);font-size:.72rem;color:var(--text-soft);}
+  .toc a:hover{color:var(--text);}
+  .toc a.is-current{color:var(--accent-ink);border-left-color:var(--signal);font-weight:600;}
+  .toc a.is-current span{color:var(--accent-ink);}
+
+  /* ================= SECTIONS ================= */
+  main{padding-top:3.5rem;min-width:0;}
+  section{
+    scroll-margin-top:1.5rem;
+    padding-bottom:clamp(3rem,6vw,4.5rem);
+  }
+  section + section{border-top:1px solid var(--rule);padding-top:clamp(2.5rem,5vw,4rem);}
+
+  .sec-num{
+    font-family:var(--font-mono);font-size:.72rem;font-weight:500;
+    letter-spacing:.2em;color:var(--signal);
+    display:block;margin-bottom:.7rem;
+  }
+  h2.sec-title{
+    font-family:var(--font-display);
+    font-variation-settings:"wdth" 112;
+    font-weight:700;
+    font-size:clamp(1.6rem,3.4vw,2.25rem);
+    line-height:1.06;letter-spacing:-.015em;
+    text-wrap:balance;margin:0 0 1.1rem;
+  }
+  h3{
+    font-family:var(--font-display);
+    font-variation-settings:"wdth" 104;
+    font-weight:700;font-size:1.12rem;line-height:1.28;
+    letter-spacing:.005em;
+    margin:2.4rem 0 .7rem;text-wrap:balance;
+  }
+  h4{
+    font-family:var(--font-mono);font-size:.72rem;font-weight:600;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--text-soft);
+    margin:1.8rem 0 .6rem;
+  }
+  p{margin:0 0 1rem;max-width:var(--measure);}
+  ul,ol{margin:0 0 1.15rem;padding-left:1.15rem;max-width:var(--measure);}
+  li{margin-bottom:.42rem;}
+  li::marker{color:var(--text-soft);}
+  strong{font-weight:600;}
+  .lead{font-size:1.06rem;color:var(--text-muted);max-width:62ch;}
+
+  /* ---- Encadré « réponse courte » ---- */
+  .verdict{
+    background:var(--surface);
+    border:1px solid var(--rule);
+    border-left:3px solid var(--signal);
+    padding:1.15rem 1.35rem;
+    margin:0 0 1.75rem;
+    max-width:var(--measure);
+    box-shadow:var(--shadow);
+  }
+  .verdict h4{margin:0 0 .5rem;color:var(--accent-ink);}
+  .verdict p:last-child{margin-bottom:0;}
+
+  .warn{
+    background:var(--chip-bg);
+    border:1px solid rgba(255,91,4,.35);
+    padding:1.15rem 1.35rem;
+    margin:1.5rem 0;
+    max-width:var(--measure);
+  }
+  .warn h4{color:var(--accent-ink);margin-top:0;}
+  .warn p:last-child{margin-bottom:0;}
+
+  /* ---- Verdicts oui/non ---- */
+  .calls{list-style:none;padding:0;margin:0 0 1.5rem;max-width:var(--measure);
+    display:flex;flex-direction:column;gap:1px;background:var(--rule);
+    border:1px solid var(--rule);}
+  .calls li{
+    background:var(--surface);margin:0;
+    display:grid;grid-template-columns:5.4rem 1fr;gap:1rem;
+    padding:.9rem 1.1rem;align-items:baseline;
+  }
+  .tag{
+    font-family:var(--font-mono);font-size:.66rem;font-weight:600;
+    letter-spacing:.12em;text-transform:uppercase;
+    padding:.24rem .45rem;text-align:center;
+    border:1px solid currentColor;border-radius:var(--radius);
+  }
+  .calls .tag{display:block;}
+  .tag-yes{color:var(--accent-ink);background:var(--chip-bg);}
+  .tag-no{color:var(--text-soft);}
+  .tag-later{color:var(--text-muted);}
+  .calls b{display:block;font-weight:600;}
+  .calls span.why{color:var(--text-muted);font-size:.93rem;}
+
+  /* ---- Tables ---- */
+  .table-wrap{overflow-x:auto;margin:1.25rem 0 1.5rem;border:1px solid var(--rule);}
+  table{border-collapse:collapse;width:100%;min-width:560px;font-size:.93rem;background:var(--surface);}
+  caption{
+    caption-side:bottom;text-align:left;padding:.7rem .95rem;
+    font-size:.82rem;color:var(--text-soft);background:var(--bg-2);
+    border-top:1px solid var(--rule);
+  }
+  th,td{padding:.62rem .95rem;text-align:left;border-bottom:1px solid var(--rule);vertical-align:top;}
+  thead th{
+    font-family:var(--font-mono);font-size:.66rem;font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--text-soft);
+    background:var(--bg-2);white-space:nowrap;
+  }
+  tbody tr:last-child td{border-bottom:none;}
+  .num{text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap;}
+  tfoot td{
+    font-weight:600;background:var(--bg-2);
+    border-top:2px solid var(--rule-strong);border-bottom:none;
+  }
+  .bar{display:block;height:6px;background:var(--chip-bg);min-width:46px;}
+  .bar i{display:block;height:100%;background:var(--signal);}
+
+  /* ---- Storyboard ---- */
+  .board{
+    display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);
+    grid-template-columns:1fr;margin:1.25rem 0 1.5rem;
+  }
+  @media (min-width:720px){.board{grid-template-columns:repeat(3,1fr);}}
+  .shot{background:var(--surface);padding:1.1rem 1.15rem;}
+  .shot .tc{
+    font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;
+    color:var(--signal);display:block;margin-bottom:.55rem;
+    font-variant-numeric:tabular-nums;
+  }
+  .shot b{display:block;font-weight:600;margin-bottom:.35rem;}
+  .shot p{font-size:.92rem;color:var(--text-muted);margin:0;max-width:none;}
+
+  /* ---- Palette ---- */
+  .swatches{
+    display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);
+    grid-template-columns:repeat(auto-fit,minmax(148px,1fr));margin:1.25rem 0 1.5rem;
+  }
+  .sw{background:var(--surface);padding:0;}
+  .sw .chip{height:74px;display:block;border-bottom:1px solid var(--rule);}
+  .sw .meta{padding:.7rem .85rem;}
+  .sw b{display:block;font-size:.9rem;font-weight:600;}
+  .sw code{
+    font-family:var(--font-mono);font-size:.75rem;color:var(--text-soft);
+    display:block;margin:.15rem 0 .35rem;
+  }
+  .sw span{font-size:.8rem;color:var(--text-muted);display:block;line-height:1.4;}
+
+  /* ---- Arborescence ---- */
+  .tree{
+    overflow-x:auto;background:var(--surface);border:1px solid var(--rule);
+    padding:1.15rem 1.25rem;margin:1.25rem 0 1.5rem;
+    font-family:var(--font-mono);font-size:.82rem;line-height:1.85;
+  }
+  .tree ul{list-style:none;margin:0;padding:0 0 0 1.15rem;max-width:none;}
+  .tree > ul{padding-left:0;}
+  .tree li{margin:0;position:relative;white-space:nowrap;}
+  .tree ul ul{border-left:1px solid var(--rule);}
+  .tree ul ul > li{padding-left:.85rem;}
+  .tree ul ul > li::before{
+    content:"";position:absolute;left:0;top:.9em;width:.6rem;height:1px;background:var(--rule);
+  }
+  .tree .path{color:var(--text);}
+  .tree .note{color:var(--text-soft);}
+  .tree .new{color:var(--accent-ink);}
+
+  /* ---- Planning ---- */
+  .gantt-wrap{overflow-x:auto;margin:1.25rem 0 1.5rem;border:1px solid var(--rule);background:var(--surface);}
+  .gantt{min-width:720px;padding:1.1rem 1.15rem 1.35rem;}
+  .gantt-head,.gantt-row{
+    display:grid;
+    grid-template-columns:180px repeat(14,1fr);
+    gap:2px;align-items:center;
+  }
+  .gantt-head{margin-bottom:.55rem;}
+  .gantt-head span{
+    font-family:var(--font-mono);font-size:.64rem;color:var(--text-soft);
+    text-align:center;letter-spacing:.04em;
+  }
+  .gantt-head span:first-child{text-align:left;letter-spacing:.14em;text-transform:uppercase;}
+  .gantt-row{margin-bottom:3px;}
+  .gantt-row b{
+    font-weight:500;font-size:.83rem;padding-right:.7rem;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .gantt-row i{grid-column:span 1;height:18px;background:var(--bg-2);border-radius:1px;}
+  .gantt-row i.on{background:var(--signal);}
+  .gantt-row i.soft{background:var(--chip-bg);border:1px solid rgba(255,91,4,.4);}
+  .gantt-row i.mark{background:var(--mark);}
+
+  /* ---- Divers ---- */
+  .kicker{
+    font-family:var(--font-mono);font-size:.7rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--text-soft);
+  }
+  .askbox{
+    background:var(--surface);border:1px solid var(--rule);
+    padding:1.25rem 1.4rem;max-width:var(--measure);box-shadow:var(--shadow);
+  }
+  .askbox ol{margin-bottom:0;}
+  .askbox li{margin-bottom:.6rem;}
+  .askbox li b{display:block;}
+  .askbox li span{color:var(--text-muted);font-size:.93rem;}
+
+  .colophon{
+    border-top:3px solid var(--signal);
+    background:var(--carbon);color:var(--on-carbon-muted);
+    padding:2.25rem clamp(1.25rem,4vw,3rem);
+    font-size:.88rem;
+  }
+  .colophon div{max-width:1240px;margin:0 auto;display:flex;flex-wrap:wrap;gap:.6rem 2rem;justify-content:space-between;}
+  .colophon b{color:var(--on-carbon);font-weight:600;}
+</style>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <p class="eyebrow">
+      <span>Cahier des charges</span>
+      <span>KS Multiservices — Le Havre</span>
+      <span>V1 · 31.08.2026</span>
+    </p>
+    <h1>Dépannage <em>24/7</em><br>Plomberie · Serrurerie · Vitrerie</h1>
+    <p class="standfirst">
+      Spécification fonctionnelle, architecture, direction artistique orange&nbsp;/&nbsp;noir,
+      planning et répartition budgétaire pour le nouveau site. Chaque question posée reçoit
+      une réponse tranchée&nbsp;: ce document est fait pour être validé ou amendé ligne à ligne,
+      pas pour être admiré.
+    </p>
+    <dl class="masthead-meta">
+      <div><dt>Budget cadre</dt><dd>50 000 € HT</dd></div>
+      <div><dt>Mise en ligne</dt><dd>S+14</dd></div>
+      <div><dt>Périmètre</dt><dd>≈ 55 URL · 9 gabarits</dd></div>
+      <div><dt>Intro</dt><dd>2,6 s · esquivable</dd></div>
+      <div><dt>Socle</dt><dd>Next.js 16 existant</dd></div>
+    </dl>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="toc" aria-label="Sommaire">
+    <h2>Sommaire</h2>
+    <ol>
+      <li><a href="#resume"><span>00</span>Les six décisions</a></li>
+      <li><a href="#contexte"><span>01</span>Contexte entreprise</a></li>
+      <li><a href="#intro"><span>02</span>Animation d’introduction</a></li>
+      <li><a href="#fonctions"><span>03</span>Fonctionnalités</a></li>
+      <li><a href="#contenu"><span>04</span>Contenu &amp; architecture</a></li>
+      <li><a href="#technique"><span>05</span>Technique, perf &amp; SEO</a></li>
+      <li><a href="#da"><span>06</span>Direction artistique</a></li>
+      <li><a href="#budget"><span>07</span>Budget</a></li>
+      <li><a href="#planning"><span>08</span>Planning</a></li>
+      <li><a href="#kpi"><span>09</span>Indicateurs de succès</a></li>
+      <li><a href="#validation"><span>10</span>Ce qu’il me manque</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <!-- ============ 00 ============ -->
+    <section id="resume">
+      <span class="sec-num">00 — Résumé</span>
+      <h2 class="sec-title">Les six décisions que ce document tranche</h2>
+      <p class="lead">
+        Vous vendez de l’urgence. Tout ce qui sépare un visiteur paniqué du bouton d’appel
+        est une perte sèche. C’est le seul arbitrage qui structure ce cahier des charges —
+        y compris l’animation d’introduction, qui doit être spectaculaire <em>sans jamais</em>
+        retarder ce bouton.
+      </p>
+      <ul class="calls">
+        <li><span class="tag tag-yes">Intro</span><span><b>Oui, 2,6 secondes, motion design.</b><span class="why">Le 06 38 98 78 30 reste cliquable dès la première image, par-dessus l’animation. Jouée une seule fois par session, jamais sur mobile lent, jamais depuis une annonce Google.</span></span></li>
+        <li><span class="tag tag-no">Réservation</span><span><b>Non pour l’urgence.</b><span class="why">Un formulaire de rendez-vous à 2 h du matin, c’est un appel perdu chez un concurrent. Le module de créneaux n’a de sens que pour la rénovation de salle de bain — phase 2.</span></span></li>
+        <li><span class="tag tag-yes">Devis</span><span><b>Oui, en 3 écrans, avec photo.</b><span class="why">Une photo de la serrure ou de la fuite permet un chiffrage juste et divise par deux les allers-retours téléphoniques.</span></span></li>
+        <li><span class="tag tag-yes">Blog</span><span><b>Oui, mais des guides, pas des actualités.</b><span class="why">12 guides d’urgence ciblant de vraies recherches locales. Une rubrique « actualités » n’est jamais alimentée et abîme le référencement.</span></span></li>
+        <li><span class="tag tag-no">Espace client</span><span><b>Non.</b><span class="why">Personne ne crée un compte pour une porte claquée. Remplacé par un suivi d’intervention par lien SMS, sans mot de passe — même bénéfice, dix fois moins cher.</span></span></li>
+        <li><span class="tag tag-later">Budget</span><span><b>50 000 € ne doivent pas tous aller dans le site.</b><span class="why">Le site seul vaut 22 à 26 k€. Le reste doit financer le contenu, le tournage et douze mois d’acquisition — sinon vous aurez un beau site que personne ne visite.</span></span></li>
+      </ul>
+    </section>
+
+    <!-- ============ 01 ============ -->
+    <section id="contexte">
+      <span class="sec-num">01 — Contexte</span>
+      <h2 class="sec-title">Ce que je sais de l’entreprise, et ce que je ne sais pas</h2>
+      <p>
+        Un cahier des charges honnête sépare les faits des suppositions. Voici la ligne exacte
+        entre les deux. Tout ce qui figure à droite doit m’être confirmé avant la production
+        du contenu&nbsp;: je ne comblerai aucun de ces trous par une valeur plausible.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th scope="col">Élément</th><th scope="col">Établi</th><th scope="col">À confirmer par vous</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Raison sociale</td><td>KS Multiservices</td><td>Forme juridique, SIRET, capital, RCS, TVA intracom</td></tr>
+            <tr><td>Adresse</td><td>2 All. François Mauriac, 76610 Le Havre</td><td>Adresse d’exercice = adresse affichée&nbsp;?</td></tr>
+            <tr><td>Téléphone</td><td>06 38 98 78 30</td><td>Second numéro / standard&nbsp;?</td></tr>
+            <tr><td>Disponibilité</td><td>24 h/24, 7 j/7, jours fériés inclus</td><td>Délai d’intervention moyen annoncé</td></tr>
+            <tr><td>Métiers</td><td>Plomberie, serrurerie, vitrerie (15 prestations listées) + rénovation de salle de bain</td><td>Prestations à ajouter ou à retirer</td></tr>
+            <tr><td>Zone</td><td>« Le Havre et son agglomération »</td><td>Liste précise des communes couvertes</td></tr>
+            <tr><td>E-mail</td><td class="note">—</td><td>Adresse de réception des demandes</td></tr>
+            <tr><td>Ancienneté &amp; effectif</td><td class="note">—</td><td>Année de création, nombre de techniciens</td></tr>
+            <tr><td>Assurances</td><td class="note">—</td><td>RC pro et décennale&nbsp;: assureur, n° de contrat, couverture géographique</td></tr>
+            <tr><td>Preuves</td><td>3 rénovations de salle de bain (photos non encore transmises)</td><td>Avis clients réels, volume d’interventions, certifications</td></tr>
+          </tbody>
+        </table>
+        <caption>Aucun chiffre d’ancienneté, d’effectif ou d’avis client n’a été inventé : les cases vides restent vides jusqu’à votre retour.</caption>
+      </div>
+
+      <h3>Un socle technique existe déjà</h3>
+      <p>
+        Un premier site a été développé dans ce dépôt&nbsp;: Next.js 16 (App Router), TypeScript,
+        Tailwind CSS v4, GSAP, avec une séquence d’intro animée, les trois métiers, un formulaire
+        de contact et les pages légales. Le contenu métier y est déjà centralisé dans un fichier
+        unique (<code>src/lib/content.ts</code>).
+      </p>
+      <p>
+        <strong>Conséquence budgétaire directe&nbsp;:</strong> la ligne « développement » ci-après
+        chiffre une <em>extension</em> de ce socle, pas une reconstruction. C’est environ 5 000 €
+        d’économie par rapport à un départ de zéro, réinjectés dans le contenu et l’acquisition.
+        La direction artistique actuelle (graphite / laiton) sera en revanche entièrement
+        remplacée par l’identité orange&nbsp;/&nbsp;noir décrite en section 06.
+      </p>
+    </section>
+
+    <!-- ============ 02 ============ -->
+    <section id="intro">
+      <span class="sec-num">02 — Question 1</span>
+      <h2 class="sec-title">Durée et contenu de l’animation d’introduction</h2>
+
+      <div class="verdict">
+        <h4>Réponse courte</h4>
+        <p>
+          <strong>2,6 secondes</strong> (3 secondes maximum absolu), en <strong>motion design 3D</strong>
+          et non en tournage réel, jouée <strong>une seule fois par session</strong>, avec le numéro de
+          téléphone cliquable dès la première image et un bouton « Passer » visible à 0,4 s.
+          Le tournage réel, lui, sert ailleurs&nbsp;: dans un film de 45 s en page d’accueil.
+        </p>
+      </div>
+
+      <div class="warn">
+        <h4>Le point sur lequel je dois être franc</h4>
+        <p>
+          Une intro bloquante sur un site de dépannage d’urgence détruit du chiffre d’affaires.
+          Le visiteur type a une fuite en cours ou dort dehors&nbsp;; il donne trois secondes au
+          site avant de revenir aux résultats Google. Une animation de 6 à 8 secondes — la durée
+          que la plupart des agences proposent — coûte littéralement des appels.
+        </p>
+        <p>
+          Je ne vous propose donc pas de renoncer à l’animation, mais de la construire sous une
+          contrainte non négociable&nbsp;: <strong>le numéro doit être appelable en moins d’une
+          seconde, animation ou pas</strong>. Tout le reste du dispositif ci-dessous découle de
+          cette règle.
+        </p>
+      </div>
+
+      <h3>Motion design plutôt que tournage&nbsp;: pourquoi</h3>
+      <ul>
+        <li><strong>Coût.</strong> Une intro tournée avec cadreur, lumière, figurants et étalonnage&nbsp;: 8 à 12 k€. La même intro en motion design 3D&nbsp;: 3 500 €.</li>
+        <li><strong>Poids.</strong> Une image de synthèse sur fond noir se compresse dix fois mieux qu’un plan tourné. C’est la différence entre 600 Ko et 6 Mo sur mobile.</li>
+        <li><strong>Droits et aléas.</strong> Pas de droit à l’image, pas de météo, pas de véhicule à immobiliser, pas de reshoot si un logo change.</li>
+        <li><strong>Durée de vie.</strong> Une intro graphique ne vieillit pas&nbsp;; un plan tourné trahit son année en trois ans.</li>
+        <li><strong>Réemploi.</strong> Les mêmes 2,6 s deviennent votre générique sur les réseaux, en pré-roll YouTube et sur l’habillage des véhicules.</li>
+      </ul>
+      <p>
+        En revanche, l’authenticité se joue <em>dans</em> le site&nbsp;: vos vrais techniciens, votre
+        vrai véhicule, vos vrais chantiers. C’est là que la journée de tournage est indispensable
+        (voir section 04), et c’est ce que les visiteurs regardent réellement avant d’appeler.
+      </p>
+
+      <h3>Storyboard proposé — un seul geste, trois métiers</h3>
+      <p>
+        L’animation ne montre pas trois logos qui défilent. Elle enchaîne l’eau, la serrure et le
+        verre en un seul mouvement de caméra continu, sans slogan ni voix off.
+      </p>
+      <div class="board">
+        <div class="shot">
+          <span class="tc">00,00 → 00,90 s</span>
+          <b>L’eau</b>
+          <p>Noir absolu. Une goutte tombe et frappe le sol. L’onde de choc se propage et devient un cercle orange incandescent.</p>
+        </div>
+        <div class="shot">
+          <span class="tc">00,90 → 01,80 s</span>
+          <b>La serrure</b>
+          <p>Le cercle se révèle être un barillet vu de face. La caméra plonge à l’intérieur&nbsp;; les goupilles défilent en tunnel métallique.</p>
+        </div>
+        <div class="shot">
+          <span class="tc">01,80 → 02,60 s</span>
+          <b>Le verre</b>
+          <p>Le tunnel débouche sur un éclat de verre qui se recompose à l’envers. Le verre devient la fenêtre du site&nbsp;: la page est déjà là, derrière.</p>
+        </div>
+      </div>
+
+      <h3>La transition vers l’accueil&nbsp;: un raccord, pas un fondu</h3>
+      <p>
+        C’est le détail qui sépare une intro premium d’une intro d’agence. La dernière image de la
+        vidéo est <strong>identique au pixel près</strong> à la première image de la page d’accueil&nbsp;:
+        même noir, même logo, même position. On ne fait pas disparaître la vidéo, on la
+        <em>remplace</em> sous le logo qui, lui, ne bouge pas. Techniquement&nbsp;: fondu d’opacité de
+        320 ms sur le calque vidéo pendant que le logo reste fixe, puis le contenu de la page monte
+        de 24 px. Le visiteur ne perçoit pas de rupture — juste une mise au point.
+      </p>
+
+      <h3>Spécifications techniques de la séquence</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Paramètre</th><th scope="col">Valeur</th><th scope="col">Raison</th></tr></thead>
+          <tbody>
+            <tr><td>Durée</td><td class="num">2,6 s</td><td>Plafond dur à 3 s, non dépassable</td></tr>
+            <tr><td>Formats</td><td>WebM/AV1 + MP4/H.264</td><td>AV1 pour les navigateurs récents, MP4 en repli universel</td></tr>
+            <tr><td>Définitions</td><td>1920×1080 · recadrage 1080×1350</td><td>Un rendu vertical dédié au mobile, pas un 16:9 rogné</td></tr>
+            <tr><td>Poids cible</td><td class="num">≤ 1,6 Mo · ≤ 700 Ko</td><td>Desktop / mobile, sur fond noir la compression est très favorable</td></tr>
+            <tr><td>Son</td><td>Aucun</td><td>L’autoplay impose le muet, et le site est consulté la nuit</td></tr>
+            <tr><td>Image d’attente</td><td>AVIF, affichée immédiatement</td><td>Aucun écran blanc pendant le chargement</td></tr>
+            <tr><td>Bouton « Passer »</td><td>Visible à 0,4 s</td><td>Accessible au clavier, en haut à droite</td></tr>
+            <tr><td>Téléphone</td><td>Cliquable dès 0,0 s</td><td>Superposé à l’animation, en permanence</td></tr>
+          </tbody>
+        </table>
+        <caption>Le fichier vidéo se charge après l’élément principal de la page d’accueil, jamais avant : l’intro ne doit pas dégrader le LCP.</caption>
+      </div>
+
+      <h4>L’intro ne se joue pas du tout dans ces six cas</h4>
+      <ul>
+        <li>Le visiteur l’a déjà vue dans la session en cours&nbsp;;</li>
+        <li>Le système déclare <code>prefers-reduced-motion</code> (troubles vestibulaires)&nbsp;;</li>
+        <li>Le mode économie de données est actif (<code>navigator.connection.saveData</code>)&nbsp;;</li>
+        <li>La connexion est estimée en 2G ou 3G&nbsp;;</li>
+        <li>L’arrivée vient d’une annonce Google Ads (paramètre <code>gclid</code>) — vous payez ce clic, il va droit au but&nbsp;;</li>
+        <li>L’URL est une page profonde (prestation, commune, guide) — l’intro est réservée à l’accueil.</li>
+      </ul>
+      <p>
+        Le mécanisme d’affichage unique par session existe déjà dans le composant
+        <code>IntroSequence.tsx</code> du dépôt&nbsp;; les cinq autres conditions sont à ajouter,
+        et le rendu graphique à refaire aux couleurs orange&nbsp;/&nbsp;noir.
+      </p>
+    </section>
+
+    <!-- ============ 03 ============ -->
+    <section id="fonctions">
+      <span class="sec-num">03 — Question 2</span>
+      <h2 class="sec-title">Fonctionnalités&nbsp;: ce qu’on construit, ce qu’on refuse</h2>
+
+      <div class="verdict">
+        <h4>Réponse courte</h4>
+        <p>
+          Pas de réservation en ligne pour l’urgence, pas d’espace client. Un formulaire de devis
+          en trois écrans avec photo, douze guides SEO, un rappel immédiat, un suivi d’intervention
+          par SMS et un suivi d’appels pour mesurer le retour sur investissement.
+        </p>
+      </div>
+
+      <h3>Le socle de conversion (lot 1, au lancement)</h3>
+      <ul>
+        <li><strong>Bouton d’appel permanent.</strong> Fixe en bas d’écran sur mobile, dans le pouce, avec l’heure affichée&nbsp;: « Il est 2 h 14 — on décroche ». C’est votre premier levier de conversion, très loin devant tout le reste.</li>
+        <li><strong>Rappel immédiat.</strong> Un champ, un numéro, un bouton&nbsp;: « On vous rappelle sous 5 minutes ». Pour ceux qui hésitent à appeler un inconnu.</li>
+        <li><strong>Formulaire de devis en 3 écrans.</strong> ① Quel problème (pictogrammes des 15 prestations) ② Photo + description + code postal ③ Coordonnées. Un seul champ par écran sur mobile, progression visible, aucune inscription.</li>
+        <li><strong>Accusé de réception automatique.</strong> SMS au client + notification e-mail et SMS à vous. Une demande de devis sans accusé de réception fait douter le client dans les dix minutes.</li>
+        <li><strong>Anti-spam sans captcha.</strong> Piège à robots, limitation de débit et Turnstile. Aucun « sélectionnez les feux tricolores » entre un client paniqué et vous.</li>
+        <li><strong>Avis Google affichés.</strong> Uniquement de vrais avis, via l’API du profil d’établissement, jamais de témoignages rédigés.</li>
+        <li><strong>Grille tarifaire publique.</strong> Voir l’encadré ci-dessous&nbsp;: c’est votre argument différenciant numéro un.</li>
+        <li><strong>Suivi d’appels.</strong> Un numéro de suivi par source (référencement naturel, Google Ads, profil Google) pour savoir quel euro rapporte quel appel. Sans cela, l’acquisition se pilote à l’aveugle.</li>
+      </ul>
+
+      <div class="warn">
+        <h4>Publier vos prix n’est pas qu’une bonne idée commerciale</h4>
+        <p>
+          Le secteur du dépannage traîne une réputation de surfacturation, particulièrement en
+          serrurerie. Afficher un tarif de départ TTC, déplacement inclus, est le signal de
+          confiance le plus puissant dont vous disposez face à un concurrent qui ne l’affiche pas.
+        </p>
+        <p>
+          C’est par ailleurs un cadre réglementé&nbsp;: l’arrêté du 24 janvier 2017 impose, pour les
+          prestations de dépannage, réparation et entretien du bâtiment, l’affichage des prix TTC,
+          du taux horaire et des frais de déplacement, ainsi que la remise d’un devis écrit avant
+          intervention. S’y ajoutent le droit de rétractation de 14 jours pour les contrats conclus
+          au domicile (avec renonciation expresse possible en cas d’urgence) et, dans les mentions
+          légales, l’identité de votre assureur en responsabilité civile professionnelle et
+          décennale ainsi que le médiateur de la consommation. Ces éléments sont à faire valider
+          par votre expert-comptable ou votre juriste avant mise en ligne — je les intègre au
+          modèle de page, vous en confirmez le contenu.
+        </p>
+      </div>
+
+      <h3>Ce que je vous déconseille, et par quoi je le remplace</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Demandé</th><th scope="col">Verdict</th><th scope="col">Alternative retenue</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Réservation / prise de rendez-vous</td>
+              <td><span class="tag tag-no">Non</span></td>
+              <td>Pour l’urgence, le téléphone gagne toujours. Un module de créneaux est en revanche pertinent pour les <strong>visites techniques de rénovation</strong>&nbsp;: prévu en phase 2, ≈ 1 200 €.</td>
+            </tr>
+            <tr>
+              <td>Espace client connecté</td>
+              <td><span class="tag tag-no">Non</span></td>
+              <td><strong>Suivi d’intervention par lien SMS</strong>, sans mot de passe&nbsp;: quand le technicien part, le client reçoit un lien affichant son prénom, sa photo, l’heure d’arrivée estimée et un bouton d’appel. Même valeur perçue, aucune friction d’inscription. Phase 2, ≈ 2 500 €.</td>
+            </tr>
+            <tr>
+              <td>Blog / actualités</td>
+              <td><span class="tag tag-yes">Oui, reformulé</span></td>
+              <td><strong>12 guides d’urgence</strong> répondant à de vraies recherches&nbsp;: « comment couper l’eau en cas de fuite », « porte claquée&nbsp;: que faire avant d’appeler », « combien coûte une ouverture de porte », « fenêtre cassée&nbsp;: sécuriser en attendant le vitrier ». Une rubrique « actualités » n’est jamais alimentée&nbsp;; un guide se positionne pendant des années.</td>
+            </tr>
+            <tr>
+              <td>Paiement en ligne</td>
+              <td><span class="tag tag-later">Plus tard</span></td>
+              <td>Sans intérêt tant que le règlement se fait sur place. À revoir seulement si vous ouvrez des contrats d’entretien récurrents.</td>
+            </tr>
+            <tr>
+              <td>Discussion instantanée</td>
+              <td><span class="tag tag-later">Plus tard</span></td>
+              <td>Un chat sans personne derrière est pire que pas de chat. Un lien WhatsApp direct, en revanche, coûte zéro et rassure&nbsp;: retenu.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Réservé aux professionnels (phase 3, si vous le souhaitez)</h3>
+      <p>
+        Si vous travaillez ou visez les syndics, agences immobilières et bailleurs sociaux, la
+        logique change&nbsp;: eux ont besoin d’un historique, de bons d’intervention et d’une
+        facturation centralisée. C’est le seul cas où un compte connecté se justifie. À chiffrer
+        séparément le jour où cette clientèle représente une part réelle de votre activité —
+        pas avant.
+      </p>
+    </section>
+
+    <!-- ============ 04 ============ -->
+    <section id="contenu">
+      <span class="sec-num">04 — Question 3</span>
+      <h2 class="sec-title">Contenu et architecture du site</h2>
+
+      <div class="verdict">
+        <h4>Réponse courte</h4>
+        <p>
+          Environ <strong>55 URL</strong> pour <strong>9 gabarits</strong>. Les textes sont rédigés
+          par un rédacteur professionnel à partir d’un entretien avec vous&nbsp;: c’est votre
+          expérience de terrain qui fait la différence, pas votre temps de rédaction. Une journée
+          de tournage photo et vidéo est indispensable — le stock photo est disqualifiant sur ce métier.
+        </p>
+      </div>
+
+      <h3>Pourquoi 55 pages et pas 6</h3>
+      <p>
+        Une page « Nos services » unique ne se positionne sur rien. La structure qui fonctionne en
+        dépannage local croise <strong>la prestation</strong> et <strong>la commune</strong>&nbsp;:
+        quelqu’un ne cherche pas « plombier », il cherche « débouchage canalisation Montivilliers ».
+        Chaque croisement pertinent mérite sa page, avec son propre contenu — jamais un texte
+        dupliqué où seul le nom de la ville change, ce que Google sanctionne.
+      </p>
+
+      <div class="tree">
+        <ul>
+          <li><span class="path">/</span> <span class="note">— Accueil (seule page avec l’intro)</span></li>
+          <li><span class="path">/urgence-24h-24</span> <span class="new">— page d’arrivée Google Ads, sans intro, un seul objectif : l’appel</span></li>
+          <li><span class="path">/plomberie</span>
+            <ul>
+              <li><span class="path">/debouchage-wc</span></li>
+              <li><span class="path">/debouchage-canalisation</span></li>
+              <li><span class="path">/recherche-fuite-deau</span></li>
+              <li><span class="path">/reparation-fuite-deau</span></li>
+              <li><span class="path">/reparation-chauffe-eau</span></li>
+            </ul>
+          </li>
+          <li><span class="path">/serrurerie</span>
+            <ul>
+              <li><span class="path">/ouverture-de-porte-claquee</span></li>
+              <li><span class="path">/ouverture-de-porte-blindee</span></li>
+              <li><span class="path">/changement-de-serrure</span></li>
+              <li><span class="path">/reparation-apres-effraction</span></li>
+              <li><span class="path">/securisation-apres-cambriolage</span></li>
+            </ul>
+          </li>
+          <li><span class="path">/vitrerie</span>
+            <ul>
+              <li><span class="path">/remplacement-de-vitre-cassee</span></li>
+              <li><span class="path">/fermeture-provisoire-apres-effraction</span></li>
+              <li><span class="path">/reparation-de-double-vitrage</span></li>
+              <li><span class="path">/remplacement-de-double-vitrage</span></li>
+              <li><span class="path">/pose-de-survitrage-vitrage-isolant</span></li>
+            </ul>
+          </li>
+          <li><span class="path">/renovation-salle-de-bain</span> <span class="note">— votre activité à forte marge</span></li>
+          <li><span class="path">/zones-d-intervention</span>
+            <ul>
+              <li><span class="path">/le-havre</span> <span class="note">+ 7 communes</span> <span class="new">(liste à valider avec vous)</span></li>
+            </ul>
+          </li>
+          <li><span class="path">/tarifs</span> <span class="new">— grille publique, obligation réglementaire</span></li>
+          <li><span class="path">/realisations</span> <span class="note">— photos avant / après</span></li>
+          <li><span class="path">/a-propos</span> <span class="note">— l’équipe, en photo, avec des prénoms</span></li>
+          <li><span class="path">/avis</span> <span class="note">— avis Google réels uniquement</span></li>
+          <li><span class="path">/contact</span> · <span class="path">/devis</span></li>
+          <li><span class="path">/guides</span> <span class="note">+ 12 articles</span></li>
+          <li><span class="path">/mentions-legales</span> · <span class="path">/politique-confidentialite</span> · <span class="path">/cgv</span> · <span class="path">/accessibilite</span> · <span class="path">/plan-du-site</span></li>
+        </ul>
+      </div>
+
+      <h4>Communes proposées pour les pages locales — à valider</h4>
+      <p>
+        Montivilliers, Harfleur, Gonfreville-l’Orcher, Sainte-Adresse, Octeville-sur-Mer,
+        Fontaine-la-Mallet, Saint-Romain-de-Colbosc, plus Le Havre. Cette liste est une
+        <em>proposition</em> fondée sur la géographie de l’agglomération, pas sur une information
+        que vous m’auriez donnée&nbsp;: confirmez ou corrigez avant rédaction. Créer une page pour
+        une commune où vous n’intervenez pas génère des appels que vous devrez refuser, ce qui
+        détériore vos avis.
+      </p>
+
+      <h3>Les textes&nbsp;: rédigés pour vous, à partir de vous</h3>
+      <p>
+        Ne rédigez pas vous-même — non par défiance, mais parce que le résultat serait produit à
+        22 h après une journée d’interventions. Le dispositif retenu&nbsp;: un entretien enregistré
+        de 90 minutes où vous racontez vos dix interventions les plus fréquentes, ce que les clients
+        vous demandent au téléphone, et ce qui les rassure. Un rédacteur en tire les 15 pages de
+        prestation, les 8 pages de commune et les 12 guides. Vous relisez, vous corrigez les termes
+        techniques, vous validez. Votre temps total&nbsp;: environ 6 heures sur le projet.
+      </p>
+
+      <h3>Photos et vidéos&nbsp;: une journée, non négociable</h3>
+      <p>
+        C’est le poste où la plupart des sites d’artisans échouent. Une photo de banque d’images
+        représentant un plombier souriant est immédiatement identifiée comme telle par un visiteur
+        méfiant, et annule le bénéfice de tout le reste. Programme de la journée&nbsp;:
+      </p>
+      <ul>
+        <li>Portraits de l’équipe, en situation, en tenue de travail — pas en studio&nbsp;;</li>
+        <li>Le véhicule, l’outillage, le matériel de recherche de fuite&nbsp;;</li>
+        <li>Trois interventions reconstituées (ouverture de porte, remplacement de vitre, recherche de fuite)&nbsp;;</li>
+        <li>Les trois rénovations de salle de bain déjà réalisées, en avant / après&nbsp;;</li>
+        <li>Rushes pour un film de 45 s en page d’accueil et six clips courts pour les réseaux.</li>
+      </ul>
+      <p>
+        Point d’attention&nbsp;: autorisation écrite de droit à l’image pour chaque personne filmée,
+        et accord des clients pour toute photo prise chez eux. C’est simple à obtenir, mais cela
+        doit être fait le jour même.
+      </p>
+    </section>
+
+    <!-- ============ 05 ============ -->
+    <section id="technique">
+      <span class="sec-num">05 — Question 4</span>
+      <h2 class="sec-title">Technique, performance et référencement</h2>
+
+      <div class="verdict">
+        <h4>Réponse courte</h4>
+        <p>
+          Conception <strong>mobile d’abord</strong> et non « responsive » après coup. Gestion de
+          contenu <strong>oui</strong>, avec un périmètre volontairement verrouillé. Référencement
+          local&nbsp;: c’est <strong>la</strong> priorité du projet, avant même le design.
+        </p>
+      </div>
+
+      <h3>Mobile d’abord, pas mobile compatible</h3>
+      <p>
+        Sur ce métier, la majorité des visites vient d’un téléphone, souvent d’une personne debout
+        dans un couloir ou devant une porte fermée, parfois d’une main, parfois sous la pluie. Cela
+        change la conception, pas seulement la mise en page&nbsp;: cibles tactiles de 48 px minimum,
+        actions principales dans la zone du pouce, contrastes tenus en plein soleil, aucun survol
+        indispensable, formulaires à un champ par écran.
+      </p>
+
+      <h3>Gestion de contenu&nbsp;: oui, mais bornée</h3>
+      <p>
+        Vous devez pouvoir modifier seul vos tarifs, ajouter une réalisation et publier un guide.
+        Vous ne devez <em>pas</em> pouvoir casser la mise en page — c’est le piège des systèmes à
+        blocs libres. Solution retenue&nbsp;: un système de gestion découplé (Sanity) avec des
+        modèles fermés, correspondant exactement aux gabarits.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Vous gérez seul</th><th scope="col">Reste figé dans le code</th></tr></thead>
+          <tbody>
+            <tr><td>Tarifs et frais de déplacement</td><td>Structure des pages et gabarits</td></tr>
+            <tr><td>Réalisations (photos, légendes)</td><td>Direction artistique et composants</td></tr>
+            <tr><td>Guides et questions fréquentes</td><td>Balisage technique et données structurées</td></tr>
+            <tr><td>Communes desservies</td><td>Séquence d’intro et animations</td></tr>
+            <tr><td>Horaires exceptionnels, message d’alerte</td><td>Formulaires et parcours de conversion</td></tr>
+          </tbody>
+        </table>
+        <caption>Coordonnées, téléphone et adresse restent centralisés dans une source unique, comme aujourd’hui dans content.ts : une donnée métier n’est jamais saisie à deux endroits.</caption>
+      </div>
+
+      <h3>Référencement local&nbsp;: le vrai moteur du projet</h3>
+      <p>
+        Un site de dépannage ne se juge pas à sa beauté mais au nombre d’appels qu’il génère. Trois
+        chantiers, par ordre de rendement&nbsp;:
+      </p>
+      <ol>
+        <li>
+          <strong>Le profil d’établissement Google.</strong> C’est lui qui remplit le téléphone,
+          souvent avant le site. Trois catégories (serrurier, plombier, vitrier), horaires 24/7
+          déclarés, photos géolocalisées ajoutées chaque mois, zone de service paramétrée, et
+          surtout&nbsp;: <strong>une réponse à 100 % des avis</strong>, y compris les mauvais.
+          Objectif&nbsp;: 20 avis authentiques supplémentaires en 90 jours, obtenus par un lien
+          envoyé en SMS après chaque intervention réussie.
+        </li>
+        <li>
+          <strong>Les pages prestation × commune.</strong> Le travail de fond décrit en section 04.
+        </li>
+        <li>
+          <strong>Les données structurées.</strong> Balisage <code>LocalBusiness</code> décliné en
+          <code>Plumber</code> et <code>Locksmith</code>, horaires 24/7, zone desservie, catalogue de
+          prestations, questions fréquentes sur chaque page métier, fil d’Ariane. La note moyenne
+          n’est balisée que si vous avez de vrais avis&nbsp;: la baliser sans avis est une pénalité
+          assurée.
+        </li>
+      </ol>
+
+      <h3>Budget de performance — contractuel</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Indicateur</th><th scope="col">Seuil</th><th scope="col">Conditions de mesure</th></tr></thead>
+          <tbody>
+            <tr><td>Affichage du contenu principal (LCP)</td><td class="num">≤ 2,0 s</td><td>Mobile milieu de gamme, réseau 4G bridé</td></tr>
+            <tr><td>Réactivité à l’interaction (INP)</td><td class="num">≤ 200 ms</td><td>Idem</td></tr>
+            <tr><td>Stabilité visuelle (CLS)</td><td class="num">≤ 0,05</td><td>Idem</td></tr>
+            <tr><td>Délai avant appel possible</td><td class="num">≤ 1,0 s</td><td>Y compris avec l’intro active</td></tr>
+            <tr><td>JavaScript initial</td><td class="num">≤ 140 Ko</td><td>Compressé, hors vidéo</td></tr>
+            <tr><td>Poids de la page d’accueil</td><td class="num">≤ 900 Ko</td><td>Hors vidéo d’intro</td></tr>
+            <tr><td>Lighthouse performance</td><td class="num">≥ 95</td><td>Mobile</td></tr>
+            <tr><td>Accessibilité</td><td>RGAA / WCAG 2.2 AA</td><td>Audit externe avant livraison</td></tr>
+          </tbody>
+        </table>
+        <caption>Ces seuils sont vérifiés en recette et conditionnent la réception du site. Un dépassement est un défaut, pas une variante.</caption>
+      </div>
+
+      <h3>Données personnelles</h3>
+      <p>
+        Hébergement dans l’Union européenne, mesure d’audience sans cookie (Plausible ou Matomo
+        auto-hébergé) — ce qui supprime le bandeau de consentement et améliore mécaniquement le
+        taux de conversion. Les photos envoyées par les clients dans le formulaire de devis sont
+        des données personnelles&nbsp;: durée de conservation limitée, suppression automatique après
+        traitement, et registre de traitement à tenir.
+      </p>
+    </section>
+
+    <!-- ============ 06 ============ -->
+    <section id="da">
+      <span class="sec-num">06 — Direction artistique</span>
+      <h2 class="sec-title">Orange et noir&nbsp;: comment le faire sans ressembler à tout le monde</h2>
+      <p class="lead">
+        L’orange sur noir est le code universel de l’intervention d’urgence&nbsp;: gyrophare,
+        gilet haute visibilité, panneau de chantier, lampe à sodium d’un lampadaire à 3 h du matin.
+        C’est un choix juste. Le risque n’est pas le couple de couleurs, c’est son exécution&nbsp;:
+        un orange saturé partout produit un site criard qui évoque la promotion discount, exactement
+        l’inverse du positionnement premium recherché.
+      </p>
+      <p>
+        La règle tenue sur tout le site&nbsp;: <strong>l’orange ne sert qu’à une chose, l’action</strong>.
+        Appeler, demander un devis, envoyer. Rien d’autre n’est orange. Le noir fait le reste du
+        travail — c’est lui qui porte le côté premium, l’orange n’est qu’un signal.
+      </p>
+
+      <h3>Palette</h3>
+      <div class="swatches">
+        <div class="sw">
+          <span class="chip" style="background:#0B0A09"></span>
+          <span class="meta"><b>Carbone</b><code>#0B0A09</code><span>Fond principal. Noir légèrement chaud, pas un noir pur&nbsp;: il fait vibrer l’orange au lieu de l’écraser.</span></span>
+        </div>
+        <div class="sw">
+          <span class="chip" style="background:#17130F"></span>
+          <span class="meta"><b>Suie</b><code>#17130F</code><span>Surfaces surélevées, cartes, en-têtes de tableaux.</span></span>
+        </div>
+        <div class="sw">
+          <span class="chip" style="background:#FF5B04"></span>
+          <span class="meta"><b>Signal</b><code>#FF5B04</code><span>Couleur d’action, exclusivement. Contraste 6,4:1 sur carbone — conforme AA en texte courant.</span></span>
+        </div>
+        <div class="sw">
+          <span class="chip" style="background:#C1440E"></span>
+          <span class="meta"><b>Braise</b><code>#C1440E</code><span>Version de l’orange lisible sur fond clair (4,8:1). Le Signal, lui, échoue sur blanc&nbsp;: 3,1:1.</span></span>
+        </div>
+        <div class="sw">
+          <span class="chip" style="background:#F5A524"></span>
+          <span class="meta"><b>Ambre</b><code>#F5A524</code><span>Accent secondaire, très parcimonieux&nbsp;: chiffres clés, jalons de planning.</span></span>
+        </div>
+        <div class="sw">
+          <span class="chip" style="background:#F2EDE7;border-bottom:1px solid rgba(0,0,0,.15)"></span>
+          <span class="meta"><b>Os</b><code>#F2EDE7</code><span>Texte sur carbone et fond des sections claires. Un blanc cassé chaud, jamais du blanc pur&nbsp;: moins agressif la nuit.</span></span>
+        </div>
+      </div>
+
+      <div class="warn">
+        <h4>Le piège de contraste à connaître</h4>
+        <p>
+          <code>#FF5B04</code> sur fond blanc plafonne à <strong>3,1:1</strong>&nbsp;: c’est
+          insuffisant pour du texte courant (le seuil AA est de 4,5:1). Il reste valable pour du
+          texte de grande taille et pour un <em>fond</em> de bouton portant du texte foncé. Dès
+          qu’un mot orange doit être lu sur clair, on bascule sur Braise <code>#C1440E</code>.
+          Cette page applique elle-même la règle&nbsp;: comparez ses liens en thème clair et en
+          thème sombre.
+        </p>
+      </div>
+
+      <h3>Typographie</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Rôle</th><th scope="col">Fonte</th><th scope="col">Pourquoi</th></tr></thead>
+          <tbody>
+            <tr><td>Titres</td><td><strong>Archivo</strong>, graisse 700–800, chasse élargie, capitales</td><td>Une grotesque industrielle qui évoque la signalétique et le marquage de chantier, sans tomber dans le pastiche « garage ».</td></tr>
+            <tr><td>Texte courant</td><td><strong>IBM Plex Sans</strong></td><td>Humaniste, très lisible en petit corps, diacritiques françaises impeccables. Ni Inter ni Space Grotesk, devenues les fontes par défaut de tous les sites générés.</td></tr>
+            <tr><td>Chiffres et étiquettes</td><td><strong>IBM Plex Mono</strong></td><td>Tarifs, délais, numéro de téléphone&nbsp;: les chiffres s’alignent en colonne et gagnent en crédibilité technique.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Principes de composition</h3>
+      <ul>
+        <li><strong>Angles vifs.</strong> Rayon de 2 px maximum. Les coins très arrondis signalent l’application grand public, pas l’artisan.</li>
+        <li><strong>Filets fins plutôt qu’ombres.</strong> Le noir absorbe les ombres portées&nbsp;; la profondeur vient des filets à 14 % d’opacité et des changements de valeur.</li>
+        <li><strong>Photographie contrastée.</strong> Étalonnage désaturé avec les hautes lumières tirées vers l’orange&nbsp;: les photos appartiennent à la même famille que l’interface.</li>
+        <li><strong>Un seul geste animé par écran.</strong> L’intro est le morceau de bravoure. Ailleurs, des apparitions au défilement discrètes, toutes désactivées si <code>prefers-reduced-motion</code> est actif.</li>
+        <li><strong>Pictogrammes tracés, pas remplis.</strong> Trait de 1,5 px, dessin technique — cohérent avec l’univers de l’outillage.</li>
+      </ul>
+
+      <h4>Migration depuis l’identité actuelle du dépôt</h4>
+      <p>
+        Le site existant utilise une base graphite avec un accent laiton brossé. La bascule est
+        directe puisque tout passe par des variables&nbsp;: <code>--color-brass</code> devient
+        Signal, <code>--color-brass-strong</code> devient Braise, <code>--color-ink</code> devient
+        Carbone, et le couple Fraunces&nbsp;/&nbsp;Inter cède la place à Archivo&nbsp;/&nbsp;IBM Plex
+        Sans. Environ une journée de travail, sans toucher à la structure des composants.
+      </p>
+    </section>
+
+    <!-- ============ 07 ============ -->
+    <section id="budget">
+      <span class="sec-num">07 — Question 5</span>
+      <h2 class="sec-title">Répartition du budget</h2>
+
+      <div class="verdict">
+        <h4>Réponse courte</h4>
+        <p>
+          Oui, les 50 000 € couvrent tout&nbsp;: conception, développement, contenu, tournage,
+          hébergement et douze mois d’acquisition. Mais je vous dois une mise en garde avant le
+          tableau.
+        </p>
+      </div>
+
+      <div class="warn">
+        <h4>50 000 € pour un site vitrine, c’est au-dessus du marché</h4>
+        <p>
+          Un site de cette qualité pour une entreprise de dépannage locale se produit
+          habituellement entre 18 000 et 26 000 € tout compris. Vous annoncer un devis à 50 000 €
+          pour le seul site serait facile&nbsp;; ce serait aussi malhonnête, et vous vous en
+          apercevriez au moment de compter les appels générés.
+        </p>
+        <p>
+          Deux issues possibles. <strong>Soit</strong> vous conservez une partie de l’enveloppe —
+          c’est parfaitement légitime, et je le dis avant de vendre. <strong>Soit</strong> vous
+          l’engagez entièrement, mais alors la moitié doit financer ce qui produit réellement des
+          appels&nbsp;: le contenu, le tournage et l’acquisition, pas des fonctionnalités
+          supplémentaires. C’est la répartition ci-dessous.
+        </p>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th scope="col">Poste</th><th scope="col">Détail</th><th scope="col" class="num">Montant HT</th><th scope="col" class="num">Part</th><th scope="col">&nbsp;</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Cadrage, UX, direction artistique</td>
+              <td>Atelier de cadrage, arborescence, wireframes, identité orange/noir, système de composants, 6 gabarits maquettés</td>
+              <td class="num">6 500 €</td><td class="num">13 %</td>
+              <td><span class="bar"><i style="width:50%"></i></span></td>
+            </tr>
+            <tr>
+              <td>Vidéo et photo</td>
+              <td>Intro en motion design 3D (3 500 €), journée de tournage + film 45 s + 6 clips (4 000 €), reportage photo équipe et réalisations (1 500 €)</td>
+              <td class="num">9 000 €</td><td class="num">18 %</td>
+              <td><span class="bar"><i style="width:69%"></i></span></td>
+            </tr>
+            <tr>
+              <td>Développement et gestion de contenu</td>
+              <td>Extension du socle Next.js existant, 9 gabarits, ≈ 55 pages, Sanity, formulaire de devis avec photo, notifications SMS, performance et accessibilité</td>
+              <td class="num">13 000 €</td><td class="num">26 %</td>
+              <td><span class="bar"><i style="width:100%"></i></span></td>
+            </tr>
+            <tr>
+              <td>Rédaction et référencement sur le site</td>
+              <td>Entretien, 15 pages prestation, 8 pages commune, 12 guides, données structurées, audit sémantique</td>
+              <td class="num">5 500 €</td><td class="num">11 %</td>
+              <td><span class="bar"><i style="width:42%"></i></span></td>
+            </tr>
+            <tr>
+              <td>Acquisition, 12 mois</td>
+              <td>Profil Google optimisé et animé, campagnes d’urgence Google Ads (mise en place + gestion + budget média de démarrage), suivi d’appels, référencements locaux</td>
+              <td class="num">9 000 €</td><td class="num">18 %</td>
+              <td><span class="bar"><i style="width:69%"></i></span></td>
+            </tr>
+            <tr>
+              <td>Hébergement, maintenance, supervision</td>
+              <td>12 mois&nbsp;: hébergement, nom de domaine, sauvegardes, mises à jour de sécurité, surveillance de disponibilité, rapport mensuel</td>
+              <td class="num">3 500 €</td><td class="num">7 %</td>
+              <td><span class="bar"><i style="width:27%"></i></span></td>
+            </tr>
+            <tr>
+              <td>Gestion de projet et recette</td>
+              <td>Pilotage, points hebdomadaires, recette fonctionnelle, audit d’accessibilité externe, formation à la prise en main</td>
+              <td class="num">1 000 €</td><td class="num">2 %</td>
+              <td><span class="bar"><i style="width:8%"></i></span></td>
+            </tr>
+            <tr>
+              <td>Réserve d’aléas</td>
+              <td>5 % — reshoot, demande hors périmètre, retard fournisseur. Non consommée, elle vous est rendue.</td>
+              <td class="num">2 500 €</td><td class="num">5 %</td>
+              <td><span class="bar"><i style="width:19%"></i></span></td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr><td colspan="2">Total</td><td class="num">50 000 €</td><td class="num">100 %</td><td>&nbsp;</td></tr>
+          </tfoot>
+        </table>
+        <caption>Montants hors taxes. Si votre enveloppe de 50 000 € est TTC, la base réelle est de 41 667 € HT et je réduis alors les lots acquisition et vidéo, jamais la performance ni l’accessibilité — merci de me le préciser.</caption>
+      </div>
+
+      <h3>Ce que cela coûte à partir de la deuxième année</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Poste</th><th scope="col" class="num">Coût annuel</th><th scope="col">Nature</th></tr></thead>
+          <tbody>
+            <tr><td>Hébergement, domaine, sauvegardes, maintenance</td><td class="num">2 400 €</td><td>Indispensable</td></tr>
+            <tr><td>Gestion de contenu (Sanity)</td><td class="num">0 à 600 €</td><td>Gratuit sous les seuils d’usage</td></tr>
+            <tr><td>Référencement continu</td><td class="num">6 000 à 9 600 €</td><td>Recommandé&nbsp;: c’est le poste qui compose dans le temps</td></tr>
+            <tr><td>Budget média Google Ads</td><td class="num">9 600 à 30 000 €</td><td>Optionnel, pilotable au mois. Attention&nbsp;: le clic « serrurier » est l’un des plus chers de France.</td></tr>
+            <tr><td>Suivi d’appels et envoi de SMS</td><td class="num">600 à 1 200 €</td><td>À l’usage</td></tr>
+          </tbody>
+        </table>
+        <caption>Le budget média est volontairement séparé du reste : il doit rester ajustable mois par mois selon le coût par appel constaté.</caption>
+      </div>
+    </section>
+
+    <!-- ============ 08 ============ -->
+    <section id="planning">
+      <span class="sec-num">08 — Planning</span>
+      <h2 class="sec-title">Quatorze semaines jusqu’à la mise en ligne</h2>
+      <p>
+        Le chemin critique n’est ni le design ni le code&nbsp;: c’est <strong>le contenu</strong>.
+        La journée de tournage en semaine 6 conditionne tout l’aval, et vos retours doivent
+        intervenir sous 48 heures ouvrées à chaque jalon. Un retard de validation d’une semaine
+        décale la mise en ligne d’une semaine, sans exception.
+      </p>
+
+      <div class="gantt-wrap">
+        <div class="gantt">
+          <div class="gantt-head">
+            <span>Phase</span>
+            <span>S1</span><span>S2</span><span>S3</span><span>S4</span><span>S5</span><span>S6</span><span>S7</span>
+            <span>S8</span><span>S9</span><span>S10</span><span>S11</span><span>S12</span><span>S13</span><span>S14</span>
+          </div>
+          <div class="gantt-row"><b>Cadrage &amp; collecte</b>
+            <i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="gantt-row"><b>Identité orange / noir</b>
+            <i></i><i></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="gantt-row"><b>Maquettes &amp; storyboard</b>
+            <i></i><i></i><i></i><i class="soft"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="gantt-row"><b>Tournage photo / vidéo</b>
+            <i></i><i></i><i></i><i></i><i></i><i class="mark"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="gantt-row"><b>Motion design de l’intro</b>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="gantt-row"><b>Développement &amp; CMS</b>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i>
+          </div>
+          <div class="gantt-row"><b>Rédaction 35 contenus</b>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="soft"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i>
+          </div>
+          <div class="gantt-row"><b>Intégration &amp; recette</b>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i></i>
+          </div>
+          <div class="gantt-row"><b>Mise en ligne &amp; Google</b>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="mark"></i>
+          </div>
+        </div>
+      </div>
+
+      <h4>Jalons de validation</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Semaine</th><th scope="col">Livrable soumis</th><th scope="col">Ce que vous validez</th></tr></thead>
+          <tbody>
+            <tr><td class="num">S2</td><td>Arborescence et parcours</td><td>Liste des pages, communes couvertes, périmètre définitif</td></tr>
+            <tr><td class="num">S4</td><td>Direction artistique</td><td>Palette, typographie, deux écrans clés — point de non-retour graphique</td></tr>
+            <tr><td class="num">S6</td><td>Maquettes complètes + storyboard</td><td>Les 6 gabarits et les 3 plans de l’intro avant production</td></tr>
+            <tr><td class="num">S9</td><td>Intro animée, première version</td><td>Rythme, raccord avec la page — une seule série de retours prévue</td></tr>
+            <tr><td class="num">S12</td><td>Site en préproduction</td><td>Recette fonctionnelle, contenu, formulaires</td></tr>
+            <tr><td class="num">S14</td><td>Mise en ligne</td><td>Bascule DNS, redirections depuis l’ancien site, profil Google</td></tr>
+          </tbody>
+        </table>
+        <caption>Puis deux revues de performance : à 30 jours (technique et indexation) et à 90 jours (positions, appels, coût par appel).</caption>
+      </div>
+
+      <h4>Si votre délai est plus court</h4>
+      <p>
+        Le calendrier ci-dessus suppose une mise en ligne complète en une fois. Si vous devez être
+        en ligne plus tôt — période de forte demande, campagne, ancien site défaillant — je
+        recommande une <strong>V1 en 6 semaines</strong>&nbsp;: accueil, trois pages métier, tarifs
+        et contact, avec l’intro en version simplifiée sans tournage. Les 15 pages de prestation,
+        les pages de commune et les guides sont ensuite publiés par vagues entre S7 et S14. Le
+        référencement y gagne même quelque chose&nbsp;: une publication progressive est plus
+        naturelle qu’un déversement de 55 pages le même jour.
+      </p>
+    </section>
+
+    <!-- ============ 09 ============ -->
+    <section id="kpi">
+      <span class="sec-num">09 — Résultats</span>
+      <h2 class="sec-title">Ce qui décidera si ce projet a réussi</h2>
+      <p>
+        Un site n’est pas jugé sur son nombre de visites. Voici les indicateurs qui figureront dans
+        le rapport mensuel, et les valeurs que je considère comme le seuil de réussite à 6 mois.
+        Les points de départ sont à établir avant la mise en ligne&nbsp;: sans mesure initiale,
+        aucune de ces cibles n’est démontrable.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Indicateur</th><th scope="col">Cible à 6 mois</th><th scope="col">Comment on le mesure</th></tr></thead>
+          <tbody>
+            <tr><td>Appels issus du site et du profil Google</td><td>Le vrai juge de paix</td><td>Suivi d’appels, par source</td></tr>
+            <tr><td>Taux de clic sur le bouton d’appel (mobile)</td><td class="num">&gt; 12 %</td><td>Événement de mesure d’audience</td></tr>
+            <tr><td>Coût par appel via Google Ads</td><td>À stabiliser puis réduire</td><td>Dépense média ÷ appels attribués</td></tr>
+            <tr><td>Positions sur 30 requêtes suivies</td><td>Top 3 local sur les requêtes principales</td><td>Suivi hebdomadaire</td></tr>
+            <tr><td>Demandes de devis complétées</td><td class="num">&gt; 45 %</td><td>Taux d’achèvement des 3 écrans</td></tr>
+            <tr><td>Avis Google</td><td class="num">+ 20 en 90 jours</td><td>Lien SMS après intervention</td></tr>
+            <tr><td>Délai avant appel possible</td><td class="num">≤ 1,0 s</td><td>Mesure sur le terrain, en continu</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ 10 ============ -->
+    <section id="validation">
+      <span class="sec-num">10 — À vous</span>
+      <h2 class="sec-title">Les neuf points qu’il me manque pour verrouiller</h2>
+      <p>
+        Tout ce qui précède est chiffré et planifiable en l’état. Ces neuf éléments, en revanche,
+        ne peuvent venir que de vous&nbsp;: je ne les ai pas inventés et je ne les inventerai pas.
+        Les points 1 à 4 sont bloquants pour démarrer la production.
+      </p>
+      <div class="askbox">
+        <ol>
+          <li><b>Le budget de 50 000 € est-il HT ou TTC&nbsp;?</b><span>L’écart est de 8 333 € — soit la moitié du lot vidéo.</span></li>
+          <li><b>Votre date de mise en ligne souhaitée.</b><span>S+14 par défaut&nbsp;; dites-moi si une échéance commerciale impose la V1 en 6 semaines.</span></li>
+          <li><b>La liste exacte des communes où vous intervenez.</b><span>Elle détermine 8 pages et une part importante du référencement local.</span></li>
+          <li><b>Une adresse e-mail de réception des demandes.</b><span>Aujourd’hui le formulaire du site existant n’envoie rien à personne.</span></li>
+          <li><b>Vos informations légales.</b><span>Forme juridique, SIRET, capital, RCS, TVA, assurances RC pro et décennale, médiateur de la consommation.</span></li>
+          <li><b>Ancienneté et effectif.</b><span>« Depuis 2015 », « 4 techniciens »&nbsp;: ce sont les deux chiffres qui rassurent le plus, et je ne les ai pas.</span></li>
+          <li><b>Votre grille tarifaire de départ.</b><span>Prix à partir de, taux horaire, frais de déplacement, majoration nuit et week-end.</span></li>
+          <li><b>Les photos des trois rénovations de salle de bain.</b><span>Elles n’ont pas pu être récupérées lors de la première session de développement.</span></li>
+          <li><b>Vos avis clients existants.</b><span>Lien du profil Google, ou capture des avis reçus ailleurs. Aucun témoignage ne sera rédigé à votre place.</span></li>
+        </ol>
+      </div>
+      <p style="margin-top:1.5rem">
+        Dès que les points 1 à 4 me parviennent, je transforme ce cahier des charges en devis ferme
+        et en planning daté, et la semaine&nbsp;1 peut démarrer.
+      </p>
+    </section>
+
+  </main>
+</div>
+
+<footer class="colophon">
+  <div>
+    <span><b>KS Multiservices</b> — 2 All. François Mauriac, 76610 Le Havre · 06 38 98 78 30</span>
+    <span>Cahier des charges V1 — 31 août 2026 · document de travail, à amender</span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+    if (!links.length || !('IntersectionObserver' in window)) return;
+    var byId = {};
+    links.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+
+    var visible = new Set();
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) visible.add(e.target.id); else visible.delete(e.target.id);
+      });
+      var order = Object.keys(byId);
+      var current = order.find(function (id) { return visible.has(id); });
+      links.forEach(function (a) {
+        a.classList.toggle('is-current', current !== undefined && a === byId[current]);
+      });
+    }, { rootMargin: '-8% 0px -70% 0px', threshold: 0 });
+
+    Object.keys(byId).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) obs.observe(el);
+    });
+  })();
+</script>
