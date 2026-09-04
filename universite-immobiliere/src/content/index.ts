@@ -1,11 +1,29 @@
 import type { CourseModule, Lesson, QuizQuestion, SkillId } from "@/lib/types";
 import { moduleDecouverte } from "./modules/m00-decouverte";
+import { moduleFondamentaux } from "./modules/m01-fondamentaux";
+import { moduleJuridique } from "./modules/m02-juridique";
+import { moduleMarche } from "./modules/m03-marche";
+import { moduleEstimation } from "./modules/m04-estimation";
+import { moduleProspection } from "./modules/m05-prospection";
+import { moduleDecouverteClient } from "./modules/m06-decouverte-client";
+import { moduleMandat } from "./modules/m07-mandat";
+import { moduleCommercialisation } from "./modules/m08-commercialisation";
 
 /**
  * Registre des modules du parcours.
  * L'ordre du tableau définit l'ordre pédagogique (niveau 0, 1, 2…).
  */
-export const MODULES: CourseModule[] = [moduleDecouverte].sort((a, b) => a.level - b.level);
+export const MODULES: CourseModule[] = [
+  moduleDecouverte,
+  moduleFondamentaux,
+  moduleJuridique,
+  moduleMarche,
+  moduleEstimation,
+  moduleProspection,
+  moduleDecouverteClient,
+  moduleMandat,
+  moduleCommercialisation,
+].sort((a, b) => a.level - b.level);
 
 export const MODULE_MAP: Record<string, CourseModule> = Object.fromEntries(
   MODULES.map((m) => [m.id, m]),
