@@ -209,7 +209,7 @@ export function ScenarioRunner({ scenarioId }: { scenarioId: string }) {
           <ul className="space-y-2.5">
             {scenario.debrief.map((d, i) => (
               <li key={i} className="flex gap-2.5 text-sm leading-relaxed">
-                <span aria-hidden className="mt-0.5 shrink-0 text-gold-500">
+                <span aria-hidden className="mt-0.5 shrink-0 text-gold-600">
                   ✦
                 </span>
                 <span>{d}</span>

@@ -29,6 +29,12 @@ import { MODULE_MAP, TOTAL_DURATION_MIN } from "@/content";
 import { SKILL_MAP } from "@/lib/skills";
 import { BADGES, earnedBadges } from "@/lib/badges";
 
+/**
+ * Instant de chargement de la page, figé au niveau du module : appeler Date.now()
+ * pendant le rendu rendrait le composant impur.
+ */
+const LOADED_AT = Date.now();
+
 function Onboarding() {
   const { state, dispatch } = useProgress();
   const [name, setName] = useState(state.profile.firstName);
@@ -39,7 +45,7 @@ function Onboarding() {
       <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em] text-gold-600">
         Bienvenue
       </p>
-      <h1 className="font-display text-2xl font-semibold">Commençons par faire connaissance</h1>
+      <h2 className="font-display text-2xl font-semibold">Commençons par faire connaissance</h2>
       <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-soft">
         Cette plateforme part du principe que vous ne connaissez rien au métier. Chaque notion est
         expliquée simplement, illustrée par un exemple immobilier, puis vérifiée par un exercice.
@@ -101,7 +107,7 @@ export function DashboardView() {
   const lessonsDoneThisWeek = Object.values(state.lessons).filter((l) => {
     if (!l.completedAt) return false;
     const d = new Date(l.completedAt).getTime();
-    return Date.now() - d < 7 * 24 * 3600 * 1000;
+    return LOADED_AT - d < 7 * 24 * 3600 * 1000;
   }).length;
 
   if (!hydrated) {
@@ -123,7 +129,7 @@ export function DashboardView() {
       {!state.profile.onboarded ? <Onboarding /> : null}
 
       <header className="mb-7">
-        <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em] text-gold-500">
+        <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em] text-gold-600">
           Tableau de bord
         </p>
         <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
@@ -171,7 +177,7 @@ export function DashboardView() {
         </Card>
 
         <Card className="border-brand-200 bg-brand-50 dark:bg-surface-2">
-          <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em] text-gold-500">
+          <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em] text-gold-600">
             Votre prochaine mission
           </p>
           {next ? (

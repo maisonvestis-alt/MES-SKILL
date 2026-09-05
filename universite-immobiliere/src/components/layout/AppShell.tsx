@@ -19,10 +19,6 @@ export function AppShell({ children }: { children: ReactNode }) {
   const { state } = useProgress();
 
   useEffect(() => {
-    setDrawer(false);
-  }, [pathname]);
-
-  useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
@@ -93,7 +89,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
             <Link
               href="/mode-terrain"
-              className="hidden h-9 items-center gap-2 rounded-lg bg-gold-400 px-3 text-sm font-semibold text-brand-950 transition-colors hover:bg-gold-300 sm:flex"
+              className="hidden h-9 items-center gap-2 rounded-lg bg-gold-400 px-3 text-sm font-semibold text-on-gold transition-colors hover:bg-gold-300 sm:flex"
             >
               <span aria-hidden>◉</span> Mode terrain
             </Link>
@@ -111,7 +107,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       {/* Barre de navigation mobile */}
       <nav
-        className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface/95 backdrop-blur lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden"
         aria-label="Navigation rapide"
       >
         <ul className="mx-auto flex max-w-lg">
@@ -133,7 +129,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   <span aria-hidden className="text-base leading-none">
                     {item.icon}
                   </span>
-                  <span className="truncate">{item.label}</span>
+                  <span className="truncate">{item.short ?? item.label}</span>
                 </Link>
               </li>
             );
@@ -141,7 +137,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </ul>
       </nav>
 
-      <GlobalSearch open={search} onClose={() => setSearch(false)} />
+      {search ? <GlobalSearch onClose={() => setSearch(false)} /> : null}
     </div>
   );
 }

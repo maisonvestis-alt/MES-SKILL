@@ -54,7 +54,7 @@ export function PageHeader({
   return (
     <header className="mb-7">
       {eyebrow ? (
-        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-gold-500">{eyebrow}</p>
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-gold-600">{eyebrow}</p>
       ) : null}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0">
@@ -83,7 +83,7 @@ const VARIANTS: Record<Variant, string> = {
   secondary:
     "bg-surface text-ink border border-line-strong hover:bg-surface-2",
   ghost: "text-ink-soft hover:bg-surface-3 border border-transparent",
-  gold: "bg-gold-400 text-brand-950 hover:bg-gold-300 border border-transparent font-semibold",
+  gold: "bg-gold-400 text-on-gold hover:bg-gold-300 border border-transparent font-semibold",
   danger: "bg-danger-soft text-danger border border-danger/30 hover:brightness-97",
 };
 

@@ -26,9 +26,9 @@ export function BlockRenderer({ blocks }: { blocks: LessonBlock[] }) {
         switch (block.type) {
           case "heading":
             return (
-              <h3 key={i} className="!mt-9 font-display text-xl font-semibold tracking-tight">
+              <h2 key={i} className="!mt-9 font-display text-xl font-semibold tracking-tight">
                 {block.text}
-              </h3>
+              </h2>
             );
 
           case "paragraph":
@@ -42,7 +42,7 @@ export function BlockRenderer({ blocks }: { blocks: LessonBlock[] }) {
             return (
               <div key={i} className="overflow-hidden rounded-xl border border-brand-200">
                 <p className="border-b border-brand-200 bg-brand-50 px-4 py-2.5 text-sm font-semibold dark:bg-surface-3">
-                  <span aria-hidden className="mr-2 text-gold-500">
+                  <span aria-hidden className="mr-2 text-gold-600">
                     §
                   </span>
                   {block.term}
@@ -84,7 +84,7 @@ export function BlockRenderer({ blocks }: { blocks: LessonBlock[] }) {
                       <li key={j} className="flex gap-3 text-[15px] leading-relaxed text-ink-soft">
                         <span
                           aria-hidden
-                          className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-brand-900 text-[11px] font-semibold text-ink-invert dark:bg-brand-200"
+                          className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-brand-900 text-[11px] font-semibold text-ink-invert dark:bg-brand-200 dark:text-ink"
                         >
                           {j + 1}
                         </span>

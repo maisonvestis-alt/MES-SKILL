@@ -315,7 +315,7 @@ export function ExamRunner({ examId }: { examId: string }) {
               className={cx(
                 "h-8 w-8 rounded-lg border text-xs font-medium tabular-nums transition-colors",
                 i === index
-                  ? "border-brand-500 bg-brand-900 text-ink-invert dark:bg-brand-200"
+                  ? "border-brand-500 bg-brand-900 text-ink-invert dark:bg-brand-200 dark:text-ink"
                   : answers[question.id] !== undefined
                     ? "border-success/40 bg-success-soft text-success"
                     : "border-line text-ink-mute hover:border-line-strong",

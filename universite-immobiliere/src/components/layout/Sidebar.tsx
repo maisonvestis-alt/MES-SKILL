@@ -74,7 +74,7 @@ export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
                       className={cx(
                         "group flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm transition-colors",
                         active
-                          ? "bg-brand-900 font-medium text-ink-invert dark:bg-brand-200"
+                          ? "bg-brand-900 font-medium text-ink-invert dark:bg-brand-200 dark:text-ink"
                           : "text-ink-soft hover:bg-surface-3 hover:text-ink",
                       )}
                     >
@@ -82,7 +82,7 @@ export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
                         aria-hidden
                         className={cx(
                           "w-4 shrink-0 text-center text-sm",
-                          active ? "text-gold-300" : "text-ink-mute group-hover:text-gold-500",
+                          active ? "text-gold-300" : "text-ink-mute group-hover:text-gold-600",
                         )}
                       >
                         {item.icon}

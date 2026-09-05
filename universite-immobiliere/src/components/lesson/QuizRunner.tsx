@@ -114,7 +114,7 @@ export function QuizRunner({
     return (
       <Card>
         <div className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gold-500">Résultat</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gold-600">Résultat</p>
           <p className="mt-2 font-display text-4xl font-semibold tabular-nums">{result.score}%</p>
           <p className="mt-1 text-sm text-ink-soft">
             {result.correct} bonne{result.correct > 1 ? "s" : ""} réponse

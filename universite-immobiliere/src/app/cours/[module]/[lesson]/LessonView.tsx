@@ -40,7 +40,7 @@ function CaseStudyCard({ lessonId, data }: { lessonId: string; data: CaseStudy }
           <li key={i} className="flex gap-3 text-sm leading-relaxed text-ink-soft">
             <span
               aria-hidden
-              className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-gold-400 text-[11px] font-semibold text-brand-950"
+              className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-gold-400 text-[11px] font-semibold text-on-gold"
             >
               {i + 1}
             </span>
@@ -171,7 +171,7 @@ export function LessonView({ lessonId }: { lessonId: string }) {
               <ul className="space-y-2.5">
                 {lesson.keyPoints.map((k, i) => (
                   <li key={i} className="flex gap-2.5 text-sm leading-relaxed">
-                    <span aria-hidden className="mt-0.5 shrink-0 text-gold-500">
+                    <span aria-hidden className="mt-0.5 shrink-0 text-gold-600">
                       ✦
                     </span>
                     <span>{k}</span>
@@ -351,7 +351,7 @@ export function LessonView({ lessonId }: { lessonId: string }) {
                     rel="noopener noreferrer"
                     className="group flex items-start gap-2 rounded-lg border border-line bg-surface p-3 text-sm transition-colors hover:border-gold-300"
                   >
-                    <span aria-hidden className="mt-0.5 text-gold-500">
+                    <span aria-hidden className="mt-0.5 text-gold-600">
                       ↗
                     </span>
                     <span>
@@ -424,7 +424,7 @@ export function LessonView({ lessonId }: { lessonId: string }) {
                           : "text-ink-soft hover:bg-surface-2",
                       )}
                     >
-                      <span aria-hidden className="mr-1.5 text-gold-500">
+                      <span aria-hidden className="mr-1.5 text-gold-600">
                         {state.lessons[l.id]?.completed ? "✓" : "·"}
                       </span>
                       {l.title}

@@ -41,21 +41,18 @@ function buildIndex(): Omit<Result, "score">[] {
   return [...lessons, ...terms, ...tools];
 }
 
-export function GlobalSearch({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function GlobalSearch({ onClose }: { onClose: () => void }) {
   const [query, setQuery] = useState("");
   const [cursor, setCursor] = useState(0);
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
-  const index = useMemo(buildIndex, []);
+  const index = useMemo(() => buildIndex(), []);
 
+  // Le composant est monté à l'ouverture : l'état démarre donc toujours propre.
   useEffect(() => {
-    if (open) {
-      setQuery("");
-      setCursor(0);
-      const t = setTimeout(() => inputRef.current?.focus(), 30);
-      return () => clearTimeout(t);
-    }
-  }, [open]);
+    const t = setTimeout(() => inputRef.current?.focus(), 30);
+    return () => clearTimeout(t);
+  }, []);
 
   const results = useMemo<Result[]>(() => {
     const q = normalize(query);
@@ -85,7 +82,6 @@ export function GlobalSearch({ open, onClose }: { open: boolean; onClose: () => 
   }, [query, index]);
 
   useEffect(() => {
-    if (!open) return;
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
       if (e.key === "ArrowDown") {
@@ -104,9 +100,7 @@ export function GlobalSearch({ open, onClose }: { open: boolean; onClose: () => 
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open, results, cursor, router, onClose]);
-
-  if (!open) return null;
+  }, [results, cursor, router, onClose]);
 
   return (
     <div

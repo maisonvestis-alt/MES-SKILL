@@ -79,7 +79,7 @@ export function QuizView() {
             className={cx(
               "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
               skill === "all"
-                ? "border-brand-500 bg-brand-900 text-ink-invert dark:bg-brand-200"
+                ? "border-brand-500 bg-brand-900 text-ink-invert dark:bg-brand-200 dark:text-ink"
                 : "border-line hover:border-line-strong",
             )}
           >
@@ -95,7 +95,7 @@ export function QuizView() {
                 className={cx(
                   "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
                   skill === s.id
-                    ? "border-brand-500 bg-brand-900 text-ink-invert dark:bg-brand-200"
+                    ? "border-brand-500 bg-brand-900 text-ink-invert dark:bg-brand-200 dark:text-ink"
                     : "border-line hover:border-line-strong",
                 )}
               >

@@ -24,7 +24,7 @@
   /* Texte */
   --ink: #0f1d2d;
   --ink-soft: #47586b;
-  --ink-mute: #7c8894;
+  --ink-mute: #5f6975;
   --ink-invert: #f7f5f1;
 
   /* Marque — bleu nuit */
@@ -49,11 +49,12 @@
   --gold-500: #ab8238;
   --gold-600: #8a672c;
   --gold-700: #6b5024;
+  --on-gold: #221904;
 
   /* Sémantique */
   --success: #2f7a5b;
   --success-soft: #e7f2ec;
-  --warning: #a9701a;
+  --warning: #8a5a12;
   --warning-soft: #fbf1de;
   --danger: #b03f2c;
   --danger-soft: #fbeae6;
@@ -83,7 +84,7 @@
 
   --ink: #eef3f8;
   --ink-soft: #a9bacb;
-  --ink-mute: #7b8ea1;
+  --ink-mute: #8b9dae;
   --ink-invert: #0a121c;
 
   --brand-50: #0f1d2d;
@@ -106,6 +107,7 @@
   --gold-500: #d9b972;
   --gold-600: #e8d3a6;
   --gold-700: #f4ead3;
+  --on-gold: #221904;
 
   --success: #5cb98f;
   --success-soft: #10291f;
@@ -155,6 +157,7 @@
   --color-gold-500: var(--gold-500);
   --color-gold-600: var(--gold-600);
   --color-gold-700: var(--gold-700);
+  --color-on-gold: var(--on-gold);
 
   --color-success: var(--success);
   --color-success-soft: var(--success-soft);
