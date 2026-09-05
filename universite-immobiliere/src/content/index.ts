@@ -8,6 +8,23 @@ import { moduleProspection } from "./modules/m05-prospection";
 import { moduleDecouverteClient } from "./modules/m06-decouverte-client";
 import { moduleMandat } from "./modules/m07-mandat";
 import { moduleCommercialisation } from "./modules/m08-commercialisation";
+import { moduleAnnonce } from "./modules/m09-annonce";
+import { modulePhoto } from "./modules/m10-photo";
+import { moduleVisites } from "./modules/m11-visites";
+import { moduleAcquereur } from "./modules/m12-acquereur";
+import { moduleNegociation } from "./modules/m13-negociation";
+import { moduleFinancement } from "./modules/m14-financement";
+import { moduleTransaction } from "./modules/m15-transaction";
+import { moduleTechnique } from "./modules/m16-technique";
+import { moduleUrbanisme } from "./modules/m17-urbanisme";
+import { moduleCopropriete } from "./modules/m18-copropriete";
+import { moduleFiscalite } from "./modules/m19-fiscalite";
+import { modulePsychologie } from "./modules/m20-psychologie";
+import { moduleBranding } from "./modules/m21-branding";
+import { moduleOrganisation } from "./modules/m22-organisation";
+import { moduleCrm } from "./modules/m23-crm";
+import { moduleIa } from "./modules/m24-ia";
+import { moduleExcellence } from "./modules/m25-excellence";
 
 /**
  * Registre des modules du parcours.
@@ -23,6 +40,23 @@ export const MODULES: CourseModule[] = [
   moduleDecouverteClient,
   moduleMandat,
   moduleCommercialisation,
+  moduleAnnonce,
+  modulePhoto,
+  moduleVisites,
+  moduleAcquereur,
+  moduleNegociation,
+  moduleFinancement,
+  moduleTransaction,
+  moduleTechnique,
+  moduleUrbanisme,
+  moduleCopropriete,
+  moduleFiscalite,
+  modulePsychologie,
+  moduleBranding,
+  moduleOrganisation,
+  moduleCrm,
+  moduleIa,
+  moduleExcellence,
 ].sort((a, b) => a.level - b.level);
 
 export const MODULE_MAP: Record<string, CourseModule> = Object.fromEntries(
